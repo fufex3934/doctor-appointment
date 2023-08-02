@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../CategoryChoose.dart';
+import '../Category/CategoryChoose.dart';
 
 class SplashScreen extends StatelessWidget {
   @override

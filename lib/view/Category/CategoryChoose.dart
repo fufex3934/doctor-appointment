@@ -1,6 +1,7 @@
+import 'package:doctor/view/individualDoctorsInfo/IndividualDoctorsInfo.dart';
 import 'package:flutter/material.dart';
 
-import '../model/listCategory.dart';
+import '../../model/listCategory.dart';
 
 class CategoryChoice extends StatefulWidget {
   const CategoryChoice({Key? key}) : super(key: key);
@@ -14,28 +15,28 @@ RatingStars rs = RatingStars(rating: 3);
 final List<Category> menu = [
   Category(
       name: 'drug',
-      icon: Image.asset(
+      Image: Image.asset(
         'lib/assets/images/drug.jpg',
         height: 50,
         width: 80,
       )),
   Category(
       name: 'Virus',
-      icon: Image.asset(
+      Image: Image.asset(
         'lib/assets/images/virus.jpg',
         height: 50,
         width: 80,
       )),
   Category(
       name: 'Psycho',
-      icon: Image.asset(
+      Image: Image.asset(
         'lib/assets/images/psycho.jpg',
         height: 50,
         width: 80,
       )),
   Category(
       name: 'Other',
-      icon: Image.asset(
+      Image: Image.asset(
         'lib/assets/images/other.png',
         height: 50,
         width: 80,
@@ -44,6 +45,7 @@ final List<Category> menu = [
 final List<DoctorsList> docList = [
   DoctorsList(
       name: 'Doctors Name',
+      bg: 'lib/assets/images/drug.jpg',
       Speciality: "Heart Break Speciality",
       Image: Image.asset(
         'lib/assets/images/drug.jpg',
@@ -54,6 +56,7 @@ final List<DoctorsList> docList = [
       Rating: 5),
   DoctorsList(
       name: 'Doctors Name',
+      bg: 'lib/assets/images/drug.jpg',
       Speciality: "Heart Break Speciality",
       Image: Image.asset(
         'lib/assets/images/drug.jpg',
@@ -64,6 +67,7 @@ final List<DoctorsList> docList = [
       Rating: 4),
   DoctorsList(
       name: 'Doctors Name',
+      bg: 'lib/assets/images/drug.jpg',
       Speciality: "Heart Break Speciality",
       Image: Image.asset(
         'lib/assets/images/drug.jpg',
@@ -74,6 +78,7 @@ final List<DoctorsList> docList = [
       Rating: 5),
   DoctorsList(
       name: 'Doctors Name',
+      bg: 'lib/assets/images/drug.jpg',
       Speciality: "Heart Break Speciality",
       Image: Image.asset(
         'lib/assets/images/drug.jpg',
@@ -84,6 +89,7 @@ final List<DoctorsList> docList = [
       Rating: 3),
   DoctorsList(
       name: 'Doctors Name',
+      bg: 'lib/assets/images/drug.jpg',
       Speciality: "Heart Break Speciality",
       Image: Image.asset(
         'lib/assets/images/drug.jpg',
@@ -98,58 +104,7 @@ List<Widget> personCards = menu.map((ele) {
   return Card(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [ele.icon, Text(ele.name)],
-    ),
-  );
-}).toList();
-
-List<Widget> listDoctors = docList.map((ele) {
-  return Card(
-    child: Container(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          ClipOval(
-            child: ele.Image,
-          ),
-          const SizedBox(
-            width: 30,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                ele.name,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Text(ele.Speciality,
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey)),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: List.generate(5, (index) {
-                  return IconTheme(
-                    data: IconThemeData(
-                      color:
-                          index < RatingStars(rating: ele.Rating).rating.floor()
-                              ? rs.color
-                              : rs.borderColor,
-                      size: rs.size,
-                    ),
-                    child: Icon(Icons.star),
-                  );
-                }),
-              )
-            ],
-          ),
-        ],
-      ),
+      children: [ele.Image, Text(ele.name)],
     ),
   );
 }).toList();
@@ -167,6 +122,109 @@ class _CategoryChoiceState extends State<CategoryChoice> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> listDoctors = docList.map((ele) {
+      return ListTile(
+          leading: CircleAvatar(
+            radius: 30,
+            backgroundImage: AssetImage(ele.bg),
+          ),
+          title: Text(ele.name),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(ele.Speciality),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(5, (index) {
+                  return IconTheme(
+                    data: IconThemeData(
+                      color:
+                          index < RatingStars(rating: ele.Rating).rating.floor()
+                              ? rs.color
+                              : rs.borderColor,
+                      size: rs.size,
+                    ),
+                    child: Icon(Icons.star),
+                  );
+                }),
+              )
+            ],
+          ),
+          onTap: () {
+            // Your onClick functionality here
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IndDoctorsInfo(
+                      doctorInfo: IndividualDoctorsInformation(
+                          name: ele.name,
+                          speciality: ele.Speciality,
+                          photo: ele.bg,
+                          Rating: ele.Rating)),
+                ));
+          });
+
+      // Card(
+      //   child: Container(
+      //     padding: const EdgeInsets.all(10),
+      //     child: Row(
+      //       children: [
+      //         ClipOval(
+      //           child: ele.Image,
+      //         ),
+      //         const SizedBox(
+      //           width: 30,
+      //         ),
+      //         Column(
+      //           crossAxisAlignment: CrossAxisAlignment.start,
+      //           children: [
+      //             Text(
+      //               ele.name,
+      //               style:
+      //                   const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      //             ),
+      //             Text(ele.Speciality,
+      //                 style: const TextStyle(
+      //                     fontSize: 12,
+      //                     fontWeight: FontWeight.normal,
+      //                     color: Colors.grey)),
+      //             const SizedBox(
+      //               height: 10,
+      //             ),
+      //             Row(
+      //               mainAxisSize: MainAxisSize.min,
+      //               children: List.generate(5, (index) {
+      //                 return IconTheme(
+      //                   data: IconThemeData(
+      //                     color:
+      //                         index < RatingStars(rating: ele.Rating).rating.floor()
+      //                             ? rs.color
+      //                             : rs.borderColor,
+      //                     size: rs.size,
+      //                   ),
+      //                   child: Icon(Icons.star),
+      //                 );
+      //               }),
+      //             )
+      //           ],
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // );
+    }).toList();
+    // Add dividers between the tiles
+    List<Widget> dividedListDoctors = [];
+    for (var i = 0; i < listDoctors.length; i++) {
+      dividedListDoctors.add(listDoctors[i]);
+      if (i < listDoctors.length - 1) {
+        dividedListDoctors.add(Divider(
+          thickness: 1,
+          height: 5,
+        ));
+      }
+    }
+
     return Scaffold(
       body: Center(
           child: Container(
@@ -293,7 +351,7 @@ class _CategoryChoiceState extends State<CategoryChoice> {
                 height: 254,
                 child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    child: Column(children: listDoctors)),
+                    child: Column(children: dividedListDoctors)),
               ),
             ],
           ),
