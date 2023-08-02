@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../CategoryChoose.dart';
 
 class SplashScreen extends StatelessWidget {
   @override
@@ -7,33 +8,45 @@ class SplashScreen extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'assets/images/image1.png',
+            'lib/assets/images/bg3.webp',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
           ),
           Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/images/image2.png',
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.4,
+            bottom: 0,
+            right: -80,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40),
+                topRight: Radius.circular(40),
+              ),
+              child: Image.asset(
+                'lib/assets/images/image3.png',
+                fit: BoxFit.fitHeight,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.7,
+              ),
             ),
           ),
           Positioned(
-            bottom: 20,
-            right: 20,
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text('Start'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+            bottom: 13,
+            left: 13,
+            child: SizedBox(
+              height:60,
+              width:180,
+              child: ElevatedButton(
+                onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>new CategoryChoice()));},
+                child: Text('Start', style: TextStyle(
+                  fontSize: 25,color: Colors.white
+                ),),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue,//Color(0xFF064687),
+                  foregroundColor: Colors.white54,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+
                 ),
               ),
             ),
