@@ -30,7 +30,6 @@ class SplashScreen extends StatelessWidget {
             right: 20,
             child: ElevatedButton(
               onPressed: () {},
-              child: Text('Start'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
@@ -38,6 +37,7 @@ class SplashScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
+              child: const Text('Start'),
             ),
           ),
         ],
