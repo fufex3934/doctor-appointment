@@ -1,4 +1,5 @@
-import './view/doctorsPage/doctor_page.dart';
+import 'view/4Patient/patient_Registration.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -21,10 +22,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute:DoctorPage.routeName,
+      initialRoute:PatientRegistration.routeName,
       routes: {
         // '/': (context) => const SplashScreen(),
-        DoctorPage.routeName: (ctx) => const DoctorPage()
+        // DoctorPage.routeName: (ctx) => const DoctorPage(),
+        PatientRegistration.routeName:(ctx)=>const PatientRegistration()
       },
     );
   }
