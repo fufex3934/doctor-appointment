@@ -1,5 +1,5 @@
 import 'view/4Patient/patient_Registration.dart';
-
+import 'view/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,11 +22,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute:PatientRegistration.routeName,
+      initialRoute: LoginPage.routeName,
       routes: {
         // '/': (context) => const SplashScreen(),
         // DoctorPage.routeName: (ctx) => const DoctorPage(),
-        PatientRegistration.routeName:(ctx)=>const PatientRegistration()
+        // PatientRegistration.routeName:(ctx)=>const PatientRegistration(),
+        LoginPage.routeName: (ctx) => LoginPage()
       },
     );
   }

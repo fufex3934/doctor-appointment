@@ -144,7 +144,7 @@ class _PatientRegistrationState extends State<PatientRegistration> {
                   Checkbox(
                     value: true, // Set the initial value here
                     onChanged: (bool? value) {
-                      // Add your checkbox logic here
+                      // Add  checkbox logic here
                     },
                   ),
                   const Text(
@@ -158,10 +158,10 @@ class _PatientRegistrationState extends State<PatientRegistration> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // Add your registration logic here
+                  // Add  registration logic here
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff1e40af), // Add your desired color
+                  backgroundColor: const Color(0xff1e40af), 
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
