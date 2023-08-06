@@ -1,5 +1,20 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+
+class Doctor {
+  final String name;
+  final String specialty;
+  final String imagePath;
+
+  Doctor({
+    required this.name,
+    required this.specialty,
+    required this.imagePath,
+  });
+}
 
 class DoctorPage extends StatefulWidget {
   static const routeName = 'doctor-page';
@@ -12,29 +27,61 @@ class DoctorPage extends StatefulWidget {
 
 class _DoctorPageState extends State<DoctorPage> {
   late GoogleMapController _mapController;
-  final LatLng _doctorLocation = const LatLng(37.7749, -122.4194); // Example doctor's location
+  LatLng _userLocation = LatLng(0, 0); // User's current location
   Set<Marker> _markers = {}; // Set of markers
 
+  List<Doctor> _doctors = [
+    Doctor(
+      name: 'Dr. Novida Navara',
+      specialty: 'Heart Break Specialist',
+      imagePath: 'assets/images/doctor1.jpg',
+    ),
+    Doctor(
+      name: 'Dr. Romans Begins',
+      specialty: 'Internal Organ Specialist',
+      imagePath: 'assets/images/doctor4.jpg',
+    ),
+    Doctor(
+      name: 'Dr. Fufa Wakgari',
+      specialty: 'Brain Break Specialist',
+      imagePath: 'assets/images/doctor2.jpg',
+    ),
+  ];
 
   @override
   void initState() {
     super.initState();
-    _addDoctorMarker();
+    _getUserLocation();
   }
 
-  void _addDoctorMarker() {
+  void _getUserLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
     setState(() {
+      _userLocation = LatLng(position.latitude, position.longitude);
+      _addDoctorMarkers();
+    });
+  }
+
+  void _addDoctorMarkers() {
+    // Clear existing markers
+    _markers.clear();
+
+    // Add doctor markers
+    for (Doctor doctor in _doctors) {
       _markers.add(
         Marker(
-          markerId: const MarkerId('doctor_marker'),
-          position: _doctorLocation,
-          infoWindow: const InfoWindow(
-            title: 'Doctor Location',
-            snippet: 'Doctor Address',
+          markerId: MarkerId(doctor.name),
+          position: LatLng(_userLocation.latitude + Random().nextDouble() / 10, _userLocation.longitude + Random().nextDouble() / 10),
+          infoWindow: InfoWindow(
+            title: doctor.name,
+            snippet: doctor.specialty,
           ),
         ),
       );
-    });
+    }
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -121,8 +168,7 @@ class _DoctorPageState extends State<DoctorPage> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.0,
-
-                                fontWeight: FontWeight.w300
+                                fontWeight: FontWeight.w300,
                               ),
                             ),
                           ],
@@ -144,7 +190,7 @@ class _DoctorPageState extends State<DoctorPage> {
                       child: GoogleMap(
                         onMapCreated: _onMapCreated,
                         initialCameraPosition: CameraPosition(
-                          target: _doctorLocation,
+                          target: _userLocation,
                           zoom: 10.0,
                         ),
                         markers: _markers,
@@ -170,230 +216,91 @@ class _DoctorPageState extends State<DoctorPage> {
                 ],
               ),
             ),
-             const SizedBox(height: 20.0,),
-             Row(
+            const SizedBox(height: 20.0),
+            Row(
               children: [
                 const Text(
-                    "Nearby Doctors",
+                  "Nearby Doctors",
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.w700,
-                    fontFamily: "Raleway"
+                    fontFamily: "Raleway",
                   ),
                 ),
                 const Spacer(),
-                TextButton(onPressed: (){},
-                    child: const Text("see all")
-                )
+                TextButton(
+                  onPressed: () {},
+                  child: const Text("see all"),
+                ),
               ],
             ),
-             const SizedBox(height: 20,),
-              Column(
-              children: [
-                Dismissible(
-                  key:const Key('doctor1'),
+            const SizedBox(height: 20),
+            Column(
+              children: _doctors.map((doctor) {
+                return Dismissible(
+                  key: Key(doctor.name),
                   direction: DismissDirection.horizontal,
+                  onDismissed: null,
                   background: Container(
-                  height: 200,
-                    width: 200,
-                    alignment: Alignment.topRight,
-                    decoration:  const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: Color(0xff1e40af),
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20.0),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF1E40AF),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
                     ),
-                    child: const Padding(
-                      padding:  EdgeInsets.only(top: 8.0,right: 8.0,bottom: 8.0),
-                      child:  CircleAvatar(
-                        backgroundColor: Colors.white60,
-                        radius: 15,
-                        child: Icon(
-                          Icons.more_horiz,
-                          color: Colors.white,
-                        ),
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.more_horiz,
+                        color: Colors.black,
                       ),
                     ),
                   ),
-                  onDismissed: (direction){
-                    setState(() {
-                     // Navigator.pushNamed(context, 'main');
-                    });
-                  },
-
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white
+                      color: Colors.white,
                     ),
-                    child: const Row(
-                      children: [
-                       CircleAvatar(
-                          backgroundImage: AssetImage(
-                              'assets/images/doctor1.jpg',
-                          ),
-                        ),
-                       SizedBox(width: 10,),
-                        Column(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
                           children: [
-                            Text(
-                              "Dr.Novida Navara",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: "Raleway",
-                                fontWeight: FontWeight.w700
-                              ),
+                            CircleAvatar(
+                              backgroundImage: AssetImage(doctor.imagePath),
                             ),
-
-                            Text(
-                              "Heart Break Specialist",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w200
-                              ),
-                            )
+                            const SizedBox(width: 10),
+                            Column(
+                              children: [
+                                Text(
+                                  doctor.name,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: "Raleway",
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Text(
+                                  doctor.specialty,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20,),
-                Dismissible(
-                  key:const Key('doctor2'),
-                  direction: DismissDirection.horizontal,
-                  background: Container(
-                    height: 200,
-                    width: 200,
-                    alignment: Alignment.topRight,
-                    decoration:  const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: Color(0xff1e40af),
-                    ),
-                    child: const Padding(
-                      padding:  EdgeInsets.only(top: 8.0,right: 8.0,bottom: 8.0),
-                      child:  CircleAvatar(
-                        backgroundColor: Colors.white60,
-                        radius: 15,
-                        child: Icon(
-                          Icons.more_horiz,
-                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
-                  onDismissed: (direction){
-                    setState(() {
-                      // Navigator.pushNamed(context, 'main');
-                    });
-                  },
-
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white
-                    ),
-                    child: const Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: AssetImage(
-                            'assets/images/doctor4.jpg',
-                          ),
-                        ),
-                        SizedBox(width: 10,),
-                        Column(
-                          children: [
-                            Text(
-                              "Dr.Romans Begins",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Raleway",
-                                  fontWeight: FontWeight.w700
-                              ),
-                            ),
-
-                            Text(
-                              "Internal Organ Specialist",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w200
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20,),
-                Dismissible(
-                  key:const Key('doctor3'),
-                  direction: DismissDirection.horizontal,
-                  background: Container(
-                    height: 200,
-                    width: 200,
-                    alignment: Alignment.topRight,
-                    decoration:  const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: Color(0xff1e40af),
-                    ),
-                    child: const Padding(
-                      padding:  EdgeInsets.only(top: 8.0,right: 8.0,bottom: 8.0),
-                      child:  CircleAvatar(
-                        backgroundColor: Colors.white60,
-                        radius: 15,
-                        child: Icon(
-                          Icons.more_horiz,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  onDismissed: (direction){
-                    setState(() {
-                      // Navigator.pushNamed(context, 'main');
-                    });
-                  },
-
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white
-                    ),
-                    child: const Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: AssetImage(
-                            'assets/images/doctor2.jpg',
-                          ),
-                        ),
-                        SizedBox(width: 10,),
-                        Column(
-                          children: [
-                            Text(
-                              "Dr.Fufa Wakgari",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Raleway",
-                                  fontWeight: FontWeight.w700
-                              ),
-                            ),
-
-                            Text(
-                              "Brain Break Specialist",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w200
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )
+                );
+              }).toList(),
+            ),
           ],
-
         ),
       ),
     );

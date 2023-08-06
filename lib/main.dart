@@ -1,3 +1,5 @@
+import 'package:doctor/view/doctorsPage/doctor_page.dart';
+
 import 'view/4Patient/patient_Registration.dart';
 import 'view/login_page.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +25,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: TodayAppointments.routeName,
+      initialRoute: DoctorPage.routeName,
       routes: {
         // '/': (context) => const SplashScreen(),
-        // DoctorPage.routeName: (ctx) => const DoctorPage(),
+        DoctorPage.routeName: (ctx) => const DoctorPage(),
         // PatientRegistration.routeName:(ctx)=>const PatientRegistration(),
         // LoginPage.routeName: (ctx) => LoginPage(),
-        TodayAppointments.routeName: (ctx) => const TodayAppointments()
+        // TodayAppointments.routeName: (ctx) => const TodayAppointments()
       },
     );
   }
