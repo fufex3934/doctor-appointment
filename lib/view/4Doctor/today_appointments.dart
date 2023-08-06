@@ -9,14 +9,54 @@ class TodayAppointments extends StatefulWidget {
   State<TodayAppointments> createState() => _TodayAppointmentsState();
 }
 
+class AppointmentData {
+  final String doctorName;
+  final String doctorImage;
+  final String assistantName;
+  final String appointmentTime;
+  final Color backgroundColor;
+
+  AppointmentData({
+    required this.doctorName,
+    required this.doctorImage,
+    required this.assistantName,
+    required this.appointmentTime,
+    required this.backgroundColor,
+  });
+}
+
 class _TodayAppointmentsState extends State<TodayAppointments> {
+  final List<AppointmentData> appointments = [
+    AppointmentData(
+      doctorName: "Loki Bright",
+      doctorImage: 'assets/images/doctor3.jpg',
+      assistantName: "Kelly Williams",
+      appointmentTime: "Today 10-30 am",
+      backgroundColor: const Color(0xff93c5fd),
+    ),
+    AppointmentData(
+      doctorName: "Loyri Brison",
+      doctorImage: 'assets/images/doctor1.jpg',
+      assistantName: "Katherine Moss",
+      appointmentTime: "Today 11-30 am",
+      backgroundColor: const Color(0xfffef9c3),
+    ),
+    AppointmentData(
+      doctorName: "OrLando Digs",
+      doctorImage: 'assets/images/doctor4.jpg',
+      assistantName: "Kelly Williams",
+      appointmentTime: "Today 12-30 am",
+      backgroundColor: const Color(0xfffef9c3),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff2e4d4),
+      backgroundColor: Colors.white,
       body: Container(
         margin: const EdgeInsets.all(15.0),
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 1),
+        padding: const EdgeInsets.only(top: 30.0, left: 4, right: 4),
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -24,429 +64,169 @@ class _TodayAppointmentsState extends State<TodayAppointments> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Color(0xfffefce8),
-                    child: Icon(Icons.chevron_left),
-                  ),
-                  SizedBox(width: 20),
-                  Text(
-                    "Today's Appointment",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Color(0xfffefce8),
+                      child: Icon(Icons.chevron_left),
                     ),
-                  ),
-                  Spacer(),
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/doctor4.jpg'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
-                    color: Color(0xff93c5fd),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: SizedBox(
-                                  height: 80,
-                                  width: 80,
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/doctor3.jpg',
-                                      height: 30,
-                                      width: 30,
-                                      fit: BoxFit.cover,
-                                      alignment: Alignment.center,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 18.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Loki Bright",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      "Doctors:",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      "Kelly Williams",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          const Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: Icon(
-                                    Icons.schedule,
-                                  )),
-                              SizedBox(width: 10),
-                              Text(
-                                "Today 10-30 am ",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                    SizedBox(width: 20),
+                    Text(
+                      "Today's Appointment",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 150,
-                                width: 50,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(30),
-                                  ),
-                                  color: Color(0xff081229),
-                                ),
-                                child: const RotatedBox(
-                                  quarterTurns:
-                                      1, // Rotate 90 degrees (quarter-turns 3)
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    child: Center(
-                                      child: Text(
-                                        'Consult',
-                                        style: TextStyle(
-                                            fontSize: 24, color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    Spacer(),
+                    CircleAvatar(
+                      backgroundImage: AssetImage('assets/images/doctor4.jpg'),
+                    ),
+                  ],
                 ),
               ),
-              // const SizedBox(height:2),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+              const SizedBox(height: 30),
+              for (int i = 0; i < appointments.length; i++)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                      color: appointments[i].backgroundColor,
                     ),
-                    color: Color(0xfffef9c3),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: SizedBox(
-                                  height: 80,
-                                  width: 80,
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/doctor1.jpg',
-                                      height: 30,
-                                      width: 30,
-                                      fit: BoxFit.cover,
-                                      alignment: Alignment.center,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: SizedBox(
+                                    height: 80,
+                                    width: 80,
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                      child: Image.asset(
+                                        appointments[i].doctorImage,
+                                        height: 30,
+                                        width: 30,
+                                        fit: BoxFit.cover,
+                                        alignment: Alignment.center,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 5),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 18.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Loyri Brison",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                const SizedBox(width: 5),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 18.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Loki Bright",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      "Doctors:",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black54,
+                                      SizedBox(height: 20),
+                                      Text(
+                                        "Doctors:",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black54,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      "Katherine Moss",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black54,
+                                      SizedBox(height: 8),
+                                      Text(
+                                        "Kelly Williams",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black54,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          const Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                               const CircleAvatar(
                                   backgroundColor: Colors.white,
                                   child: Icon(
                                     Icons.schedule,
-                                  )),
-                              SizedBox(width: 10),
-                              Text(
-                                "Today 11-30 am ",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 150,
-                                  width: 50,
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(30),
-                                    ),
-                                    color: Color(0xff081229),
                                   ),
-                                  child: const RotatedBox(
-                                    quarterTurns:
-                                        1, // Rotate 90 degrees (quarter-turns 3)
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: Center(
-                                        child: Text(
-                                          'Consult',
-                                          style: TextStyle(
-                                              fontSize: 24,
-                                              color: Colors.white),
+                                ),
+                               const SizedBox(width: 10),
+                                Text(
+                                  appointments[i].appointmentTime,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: 150,
+                                    width: 50,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(30),
+                                      ),
+                                      color: Color(0xff081229),
+                                    ),
+                                    child: const RotatedBox(
+                                      quarterTurns:
+                                          1, // Rotate 90 degrees (quarter-turns 3)
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 10),
+                                        child: Center(
+                                          child: Text(
+                                            'Consult',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                        )
+                      ],
                     ),
-                    color: Color(0xfffef9c3),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: SizedBox(
-                                  height: 80,
-                                  width: 80,
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/doctor4.jpg',
-                                      height: 30,
-                                      width: 30,
-                                      fit: BoxFit.cover,
-                                      alignment: Alignment.center,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 18.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "OrLando Digs",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      "Doctors:",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      "Kelly Williams",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          const Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: Icon(
-                                    Icons.schedule,
-                                  )),
-                              SizedBox(width: 10),
-                              Text(
-                                "Today 12-30 am ",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                height: 150,
-                                width: 50,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(30),
-                                  ),
-                                  color: Color(0xff081229),
-                                ),
-                                child: const RotatedBox(
-                                  quarterTurns:
-                                      1, // Rotate 90 degrees (quarter-turns 3)
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    child: Center(
-                                      child: Text(
-                                        'Consult',
-                                        style: TextStyle(
-                                            fontSize: 24, color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
                   ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -471,16 +251,17 @@ class _TodayAppointmentsState extends State<TodayAppointments> {
                   children: [
                     Expanded(
                       child: Container(
-                          height: 100,
-                          width: 100,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(30),
-                            ),
-                            color: Color(0xff081229),
+                        height: 100,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
                           ),
-                          child: const Icon(Icons.date_range,
-                              color: Colors.white, size: 30)),
+                          color: Color(0xff081229),
+                        ),
+                        child: const Icon(Icons.date_range,
+                            color: Colors.white, size: 30),
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
