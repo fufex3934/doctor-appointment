@@ -25,12 +25,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: DoctorPage.routeName,
+      initialRoute: LoginPage.routeName,
       routes: {
         // '/': (context) => const SplashScreen(),
-        DoctorPage.routeName: (ctx) => const DoctorPage(),
+        // DoctorPage.routeName: (ctx) => const DoctorPage(),
         // PatientRegistration.routeName:(ctx)=>const PatientRegistration(),
-        // LoginPage.routeName: (ctx) => LoginPage(),
+        LoginPage.routeName: (ctx) => LoginPage(),
         // TodayAppointments.routeName: (ctx) => const TodayAppointments()
       },
     );
