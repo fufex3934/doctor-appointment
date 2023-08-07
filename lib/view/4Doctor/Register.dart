@@ -1,4 +1,5 @@
 import 'package:doctor/model/listCategory.dart';
+import 'package:doctor/view/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -425,7 +426,9 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                   children: [
                     Text("Already have Account ?"),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+                        },
                         child: Text(
                           "Login",
                         )), //takes the doctor from registration to login

@@ -1,5 +1,6 @@
 import 'package:doctor/model/listCategory.dart';
 import 'package:doctor/view/4Doctor/Register.dart';
+import 'package:doctor/view/4Patient/patient_Registration.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -15,7 +16,7 @@ class _LandingPageState extends State<LandingPage> {
   int currentPageIndex = 0;
   List<Widget> pages = [
     RegisterDoctor(),
-    Page2(),
+    PatientRegistration(),
   ];
 
   @override
