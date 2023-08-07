@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
         children: [
           const Center(
             child: Padding(
-              padding:  EdgeInsets.only(left: 10, top: 100),
+              padding: const EdgeInsets.only(left: 10, top: 100),
               child: Text(
                 "Login Page",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),

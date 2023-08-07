@@ -1,22 +1,18 @@
-import 'package:doctor/view/doctorsPage/doctor_page.dart';
-
-import 'view/4Patient/patient_Registration.dart';
-import 'view/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import '/view/4Doctor/today_appointments.dart';
+import 'view/trial_page/trial.dart';
+import 'view/splashPage/splash_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -25,14 +21,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: LoginPage.routeName,
+      initialRoute: '/',
       routes: {
-        // '/': (context) => const SplashScreen(),
-        // DoctorPage.routeName: (ctx) => const DoctorPage(),
-        // PatientRegistration.routeName:(ctx)=>const PatientRegistration(),
-        LoginPage.routeName: (ctx) => LoginPage(),
-        // TodayAppointments.routeName: (ctx) => const TodayAppointments()
+        '/': (context) => SplashScreen(),
+        // '/home': (context) => Homepage(),
       },
     );
   }
 }
+
+
