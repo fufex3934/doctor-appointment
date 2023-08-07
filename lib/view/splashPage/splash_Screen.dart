@@ -1,7 +1,25 @@
+import 'package:doctor/view/4Doctor/Register.dart';
+import 'package:doctor/view/LandingPage.dart';
 import 'package:flutter/material.dart';
-import '../Category/CategoryChoose.dart';
+import '../4Patient/Category/CategoryChoose.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  void initState() {
+    super.initState();
+    _navigateToHome();
+  }
+
+  void _navigateToHome() async {
+    await Future.delayed(Duration(milliseconds: 1500), () {});
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => new LandingPage()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,28 +47,7 @@ class SplashScreen extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            bottom: 13,
-            left: 13,
-            child: SizedBox(
-              height:60,
-              width:180,
-              child: ElevatedButton(
-                onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>new CategoryChoice()));},
-                child: Text('Start', style: TextStyle(
-                  fontSize: 25,color: Colors.white
-                ),),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,//Color(0xFF064687),
-                  foregroundColor: Colors.white54,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40),
-                  ),
 
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

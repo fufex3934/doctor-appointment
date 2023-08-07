@@ -1,7 +1,7 @@
-import 'package:doctor/view/individualDoctorsInfo/IndividualDoctorsInfo.dart';
+import 'package:doctor/view/4Patient/individualDoctorsInfo/IndividualDoctorsInfo.dart';
 import 'package:flutter/material.dart';
 
-import '../../model/listCategory.dart';
+import '../../../model/listCategory.dart';
 
 class CategoryChoice extends StatefulWidget {
   const CategoryChoice({Key? key}) : super(key: key);

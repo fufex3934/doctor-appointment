@@ -1,5 +1,5 @@
 import 'package:doctor/model/listCategory.dart';
-import 'package:doctor/view/BookAppointment/bookAppointment.dart';
+import 'package:doctor/view/4Patient/BookAppointment/bookAppointment.dart';
 import 'package:flutter/material.dart';
 
 class IndDoctorsInfo extends StatelessWidget {

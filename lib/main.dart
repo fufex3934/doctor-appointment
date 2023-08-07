@@ -1,5 +1,3 @@
-import 'package:doctor/view/BookAppointment/bookAppointment.dart';
-import 'package:doctor/view/individualDoctorsInfo/IndividualDoctorsInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';

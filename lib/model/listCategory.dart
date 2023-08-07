@@ -47,3 +47,22 @@ class IndividualDoctorsInformation {
       required this.photo,
       required this.Rating}); //biography , number of patient and scheduale to be added
 }
+
+class RegisterModelDoctor {
+  final String fullname;
+  final String specialization;
+  final String experience;
+  final String email;
+  final String password;
+  final loc_lat;
+  final loc_long;
+
+  RegisterModelDoctor(
+      {required this.fullname,
+      required this.specialization,
+      required this.experience,
+      required this.email,
+      required this.loc_lat,
+      required this.loc_long,
+      required this.password});
+}
