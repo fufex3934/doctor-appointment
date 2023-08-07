@@ -1,7 +1,24 @@
+import 'package:doctor/view/4Doctor/Register.dart';
+import 'package:doctor/view/LandingPage.dart';
 import 'package:flutter/material.dart';
+import '../4Patient/Category/CategoryChoose.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  void initState() {
+    super.initState();
+    _navigateToHome();
+  }
+
+  void _navigateToHome() async {
+    await Future.delayed(Duration(milliseconds: 1500), () {});
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => new LandingPage()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,37 +26,28 @@ class SplashScreen extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'assets/images/image1.png',
+            'lib/assets/images/bg3.webp',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
           ),
           Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/images/image2.png',
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.4,
-            ),
-          ),
-          Positioned(
-            bottom: 20,
-            right: 20,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
+            bottom: 0,
+            right: -80,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40),
+                topRight: Radius.circular(40),
               ),
-              child: const Text('Start'),
+              child: Image.asset(
+                'lib/assets/images/image3.png',
+                fit: BoxFit.fitHeight,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.7,
+              ),
             ),
           ),
+
         ],
       ),
     );
