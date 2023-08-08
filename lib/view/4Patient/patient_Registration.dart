@@ -1,4 +1,6 @@
+import 'package:doctor/view/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class PatientRegistration extends StatefulWidget {
   static const routeName = 'patient-register';
@@ -10,6 +12,153 @@ class PatientRegistration extends StatefulWidget {
 }
 
 class _PatientRegistrationState extends State<PatientRegistration> {
+  bool privacyPolicyAgreed = false;
+  bool term_conditionAgreement = false;
+  String privacyPolicy = '''Privacy Policy
+
+Last updated: [Date]
+
+1. Introduction
+
+Welcome to [Your Website/App Name] ("us," "we," or "our"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website [www.example.com] or mobile application (the "Service"). Please read this Privacy Policy carefully. By accessing or using the Service, you consent to the practices described in this Privacy Policy.
+
+2. Information We Collect
+
+We may collect and process the following types of personal information about you:
+
+- Information you provide directly: We may collect personal information that you provide directly when you [register, fill out forms, make a purchase, or interact with the Service].
+
+- Automatically collected information: We may collect certain information automatically when you access and use the Service. This information may include [your IP address, device type, browser type, operating system, and usage information].
+
+3. Use of Information
+
+We may use the information we collect for various purposes, including:
+
+- To provide and maintain the Service
+- To process your transactions
+- To improve the Service
+- To send you promotional materials and newsletters
+- To respond to your inquiries and provide customer support
+
+4. Sharing of Information
+
+We may share your information with third parties in the following circumstances:
+
+- With service providers: We may share your information with third-party service providers who perform services on our behalf.
+- For legal purposes: We may share your information in response to a subpoena, court order, or government request.
+- With your consent: We may share your information with your consent.
+
+5. Cookies and Similar Technologies
+
+We may use cookies and similar technologies to collect information about your interactions with the Service. You can manage your cookie preferences through your browser settings.
+
+6. Security
+
+We use reasonable measures to protect your information from unauthorized access, use, or disclosure. However, no data transmission over the internet or method of electronic storage is entirely secure.
+
+7. Third-Party Links
+
+The Service may contain links to third-party websites or services. We are not responsible for the practices of such third parties.
+
+8. Children's Privacy
+
+The Service is not directed to individuals under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe that your child has provided us with personal information, please contact us.
+
+9. Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time. The updated version will be indicated by the "Last updated" date at the top of this page.
+
+10. Contact Us
+
+If you have any questions or concerns about this Privacy Policy, please contact us at [your email address].
+
+''';
+  String termsAndConditions = ''' 
+  Terms and Conditions
+
+  Last updated: [Date]
+
+  1. Introduction
+
+  Welcome to [Your Doctor-Patient Meeting App Name] ("us," "we," or "our"). These Terms and Conditions govern your use of our app. By using the app, you agree to comply with these terms. Please read them carefully.
+
+  2. Acceptance of Terms
+
+  By using the app, you accept and agree to be bound by these Terms and Conditions. If you do not agree, please do not use the app.
+
+  3. Eligibility
+
+  You must be [age] years old or older to use this app. By using the app, you represent and warrant that you meet the eligibility requirements.
+
+  4. User Accounts
+
+  To access certain features, you may need to create a user account. You are responsible for maintaining the confidentiality of your account information and agree to accept responsibility for all activities that occur under your account.
+
+  5. Services and Scope
+
+  Our app provides a platform for doctors and patients to connect and schedule appointments. However, we do not provide medical services. Our app does not establish a doctor-patient relationship. It is essential to consult a qualified healthcare professional for medical advice.
+
+  6. User Conduct
+
+  You agree not to use the app for any unlawful or abusive purposes. You shall not engage in spamming, hacking, or any activities that may harm the app or its users.
+
+  7. Intellectual Property Rights
+
+  The app and its content are protected by intellectual property laws. You may not copy, modify, or distribute the app's content without our prior written consent.
+
+  8. Privacy and Data Protection
+
+  We collect and process your data in accordance with our Privacy Policy. By using the app, you consent to our data practices.
+
+  9. Communications
+
+  By using the app, you agree to receive communications from us, such as notifications and emails. You may opt-out of marketing communications.
+
+  10. Indemnification
+
+  You agree to indemnify and hold us harmless from any claims, damages, or losses arising from your use of the app.
+
+  11. Dispute Resolution and Governing Law
+
+  Any disputes arising from the use of the app shall be resolved according to the laws of [Jurisdiction]. You agree to submit to the exclusive jurisdiction of the courts in [Jurisdiction].
+
+  12. Limitation of Liability
+
+  We shall not be liable for any damages or losses arising from your use of the app. Our total liability shall not exceed the amount paid, if any, by you for using the app.
+
+  13. Modifications and Termination
+
+  We reserve the right to modify or terminate the app and these terms at any time. Changes will be effective upon posting on the app.
+
+  14. Miscellaneous
+
+  If any provision of these Terms and Conditions is deemed invalid or unenforceable, the remaining provisions shall remain in full force and effect. These terms constitute the entire agreement between you and us.
+
+  If you have any questions or concerns about these terms, please contact us at [your email address].
+  ''';
+
+  void _showRequiredInformationDialog(title, text) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: Text(text),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   final TextEditingController _birthdateController = TextEditingController();
   DateTime? _selectedDate;
   final _formKey = GlobalKey<FormState>();
@@ -42,6 +191,46 @@ class _PatientRegistrationState extends State<PatientRegistration> {
     _birthdateController.dispose();
     super.dispose();
   }
+
+  //register function
+ 
+
+  Future<void> _registerPatient() async {
+  if (!_agreedToPrivacyPolicy || !term_conditionAgreement) {
+    _showRequiredInformationDialog(
+      'Terms and Privacy Policy Agreement',
+      'Please agree to the Terms and Privacy Policy to proceed.',
+    );
+    return;
+  }
+
+  if (_formKey.currentState!.validate()) {
+    _formKey.currentState!.save();
+
+    final url =
+        'http://192.168.0.150:3000/api/users/register/patients'; // Replace with your backend URL
+    final response = await http.post(Uri.parse(url), body: {
+      'fullName': _fullName, // Use the class-level variable here
+      'email': _email, // Use the class-level variable here
+      'password': _password, // Use the class-level variable here
+      'birthDate': _selectedDate?.toIso8601String() ?? '', // Convert DateTime to ISO 8601 string format
+    });
+
+    if (response.statusCode == 201) {
+      // Registration successful, handle navigation or show a success message
+      // For example, navigate to the login page
+      print(_fullName);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    } else {
+      // Registration failed, handle error
+      // You can show an error message to the user
+      print('Registration failed: ${response.body}');
+    }
+  }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +283,7 @@ class _PatientRegistrationState extends State<PatientRegistration> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
+                  
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     hintText: "Enter Your Email",
@@ -195,29 +385,65 @@ class _PatientRegistrationState extends State<PatientRegistration> {
                 Row(
                   children: [
                     Checkbox(
-                      value: _agreedToPrivacyPolicy,
-                      onChanged: (bool? value) {
+                      value: privacyPolicyAgreed,
+                      onChanged: (value) {
                         setState(() {
-                          _agreedToPrivacyPolicy = value ?? false;
+                          privacyPolicyAgreed = !privacyPolicyAgreed;
                         });
                       },
                     ),
-                    const Text(
-                      "I agree to the Privacy Policy",
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w400,
-                      ),
+                    Expanded(
+                      child: Text("I agree to Privacy Policy"),
+                    ) //TODO : make it to navigate to privacy policy page when text is clicked
+                    ,
+                    Expanded(
+                      child: TextButton(
+                          onPressed: () {
+                            _showRequiredInformationDialog(
+                                'Privacy Policy', privacyPolicy);
+                          },
+                          child: Text("Read...")),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: term_conditionAgreement,
+                      onChanged: (value) {
+                        setState(() {
+                          term_conditionAgreement = !term_conditionAgreement;
+                        });
+                      },
                     ),
+                    Expanded(child: Text("agree to Terms and Conditions")),
+                    Expanded(
+                      child: TextButton(
+                          onPressed: () {
+                            _showRequiredInformationDialog(
+                                'Terms and Condition', termsAndConditions);
+                          },
+                          child: Text("Read...")),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text("Already have Account ?"),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
+                        },
+                        child: Text(
+                          "Login",
+                        )), //takes the doctor from registration to login
                   ],
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      // Add registration logic here using the saved form data
-                    }
-                  },
+                  onPressed: _registerPatient,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff1e40af),
                     shape: RoundedRectangleBorder(
