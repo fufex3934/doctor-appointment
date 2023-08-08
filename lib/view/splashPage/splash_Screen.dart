@@ -1,5 +1,5 @@
 import 'package:doctor/view/4Doctor/Register.dart';
-import 'package:doctor/view/LandingPage.dart';
+import 'package:doctor/view/Registration_page.dart';
 import 'package:flutter/material.dart';
 import '../4Patient/Category/CategoryChoose.dart';
 
