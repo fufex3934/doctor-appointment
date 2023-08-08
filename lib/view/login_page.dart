@@ -1,4 +1,5 @@
 import 'package:doctor/view/4Doctor/today_appointments.dart';
+import 'package:doctor/view/4Patient/BookAppointment/bookAppointment.dart';
 import 'package:doctor/view/4Patient/Category/CategoryChoose.dart';
 import 'package:doctor/view/Registration_page.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +28,53 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset:
           false, // Avoid the keyboard overlaying the content
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50),
+        padding:
+            const EdgeInsets.only(left: 20.0, right: 20, top: 100, bottom: 0),
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    selectedOption = "Doctor";
+                    currentPageIndex = 0;
+                  });
+                },
+                child: Text(
+                  "Doctor",
+                  style: TextStyle(
+                      fontSize: selectedOption == "Doctor" ? 25 : 20,
+                      color: selectedOption == "Doctor"
+                          ? Colors.blue
+                          : Colors.black),
+                ),
+              ),
+              Container(
+                width: 2, // Width of the vertical line
+                height: 20, // Height of the vertical line
+                color: Colors.grey, // Color of the vertical line
+              ),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedOption = "Patient";
+                      currentPageIndex = 1;
+                    });
+                  },
+                  child: Text(
+                    "Patient",
+                    style: TextStyle(
+                        fontSize: selectedOption == "Patient" ? 25 : 20,
+                        color: selectedOption == "Patient"
+                            ? Colors.blue
+                            : Colors.black),
+                  )),
+            ],
+          ),
           const Center(
             child: Padding(
-              padding: const EdgeInsets.only(left: 10, top: 100),
+              padding: const EdgeInsets.only(left: 10, top: 20),
               child: Text(
                 "Login Page",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
@@ -95,7 +138,26 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                // Call login function here using _email and _password
+                if (_email == "aa@gmail.com" && _password == "1234") {
+                  if (selectedOption == "Doctor") {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TodayAppointments()));
+                  } else if (selectedOption == "Patient") {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BookAppointment()));
+                  }
+                } else {
+                  SnackBar(
+                    content: Text("Please Check your Email or Password"),
+                    shape: Border.all(
+                        color: Colors.red, style: BorderStyle.solid, width: 2),
+                    duration: Duration(milliseconds: 1500),
+                  );
+                }
               }
             },
             style: ElevatedButton.styleFrom(
@@ -144,7 +206,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextButton(
                 onPressed: () {
-                  // Add registration logic here
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LandingPage()));
                 },
                 child: const Text(
                   "Sign Up",
