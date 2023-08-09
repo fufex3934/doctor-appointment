@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:doctor/view/4Doctor/today_appointments.dart';
 import 'package:doctor/view/4Patient/BookAppointment/bookAppointment.dart';
 import 'package:doctor/view/4Patient/Category/CategoryChoose.dart';
 import 'package:doctor/view/Registration_page.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   static const routeName = 'login';
@@ -17,12 +20,22 @@ class _LoginPageState extends State<LoginPage> {
   String selectedOption = "Doctor";
   List<String> options = ["Doctor", "Patient"];
   int currentPageIndex = 0;
-
+  String _email = '';
+  String _password = '';
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    String _email = '';
-    String _password = '';
+
+
+    Future<bool> DoctorsLogin() async {
+      final response = await http.post(
+          Uri.parse('http://192.168.0.169:5000/users/Doctor/Login4Doctor'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'email': _email, 'password': _password}));
+
+      print(response);
+      return true;
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset:
@@ -82,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           const SizedBox(height: 20),
+
           const Text(
             "Email",
             style: TextStyle(
@@ -104,7 +118,10 @@ class _LoginPageState extends State<LoginPage> {
               return null;
             },
             onSaved: (value) {
-              _email = value!;
+              setState(() {
+                _email = value!;
+              });
+
             },
           ),
           const SizedBox(height: 20),
@@ -130,16 +147,23 @@ class _LoginPageState extends State<LoginPage> {
               return null;
             },
             onSaved: (value) {
-              _password = value!;
+              setState(() {
+                _password = value!;
+              });
+
             },
           ),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
+
+              if (_formKey.currentState != null &&
+                  _formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
+                print(_email);
                 if (_email == "aa@gmail.com" && _password == "1234") {
                   if (selectedOption == "Doctor") {
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(
