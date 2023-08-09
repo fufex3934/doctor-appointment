@@ -26,13 +26,5 @@ router.post('/RegisterDoctor', async (req, res) => {
     await Doctor_data.save().then((val) => { res.send("successfull"); console.log(val) }).catch((err) => console.log(err));
 
 });
-router.post('/Login4Doctor', async (req, res) => {
-    const { email, password } = req.body;
-
-    console.log(req.body);
-
-    console.log(email, password)
-    res.send(req.body)
-
-});
+router.post('/Login4Doctor', );
 module.exports = router;

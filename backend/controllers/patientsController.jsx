@@ -13,6 +13,8 @@ const registerPatient = async (req, res) => {
     }
 };
 
+
+
 module.exports = {
     registerPatient,
 }
