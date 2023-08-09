@@ -200,7 +200,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
 
-        final url = 'http://192.168.0.150:3000/users/register/patients';
+        final url = 'http://192.168.0.150:3000/api/users/register/patients';
         final response = await http.post(
           Uri.parse(url),
           headers: {"Content-Type": "application/json"},

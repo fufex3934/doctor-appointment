@@ -2,6 +2,10 @@ import 'package:doctor/model/listCategory.dart';
 import 'package:doctor/view/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/io.dart';
 
 class RegisterDoctor extends StatefulWidget {
   @override
@@ -174,18 +178,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
   double lat = 0;
   double long = 0;
 
-  RegisterModelDoctor Register() {
-    return RegisterModelDoctor(
-        fullname: _fullnameController.text,
-        specialization: _specializationController.text,
-        experience: _experienceController.text,
-        email: _emailController.text,
-        loc_lat: lat,
-        loc_long: long,
-        password: _passwordController.text);
-  }
-
-  late Position _currentPosition;
+    late Position _currentPosition;
 
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
@@ -272,6 +265,69 @@ If you have any questions or concerns about this Privacy Policy, please contact 
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  // Register<String> ()  {
+  //   return jsonEncode({
+  //       'fullname': _fullnameController.text,
+  //       'specialization': _specializationController.text,
+  //       'experience': _experienceController.text,
+  //       'email': _emailController.text,
+  //       'loc_lat': lat,
+  //       'loc_long': long,
+  //       'password': _passwordController.text});
+  // }
+
+  Future<void> Register_Doctor() async {
+    // final response = await http.post(
+    //   Uri.parse('http://localhost:5000/api/users/register/patients'),
+    //   headers: <String, String>{
+    //     'Content-Type': 'application/json; charset=UTF-8',
+    //   },
+    //   body: jsonEncode(<RegisterModelDoctor>{Register()}),
+    // );
+    //
+    // if (response.statusCode == 201) {
+    //   // If the server did return a 201 CREATED response,
+    //   // then parse the JSON.
+    //     print(jsonDecode(response.body));
+    // } else {
+    //   // If the server did not return a 201 CREATED response,
+    //   // then throw an exception.
+    //   throw Exception('Failed to create album.');
+    // }
+
+    // try {
+    //
+    //   final WebSocketChannel channel =
+    //   IOWebSocketChannel.connect(Uri.parse('ws://192.168.0.169:1234'));
+    //   channel.sink.add(Register());
+    //   channel.stream.listen((event) {
+    //     print(event);
+    //     channel.sink.close();
+    //   });
+    // } catch (e) {
+    //   print(e);
+    // }
+
+    final response = await http.post(
+        Uri.parse('http://192.168.0.169:5000/users/Doctor/RegisterDoctor'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'fullname': _fullnameController.text,
+          'specialization': _specializationController.text,
+          'experience': _experienceController.text,
+          'email': _emailController.text,
+          'loc_lat': lat,
+          'loc_long': long,
+          'password': _passwordController.text
+        }));
+
+    if (response.statusCode == 200) {
+      print('message delivered successfully');
+    } else {
+      print('Failed to register student');
+    }
   }
 
   @override
@@ -427,7 +483,10 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                     Text("Already have Account ?"),
                     TextButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
                         },
                         child: Text(
                           "Login",
@@ -468,8 +527,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                               _isSubmitted = true;
                             });
 
-                            print(
-                                '${Register().loc_long}+" : "+${Register().loc_lat} +""+${_fullnameController.text}');
+                            Register_Doctor();
                           }
                         } else {
                           showDialog(
