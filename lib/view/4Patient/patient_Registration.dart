@@ -1,6 +1,7 @@
 import 'package:doctor/view/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PatientRegistration extends StatefulWidget {
   static const routeName = 'patient-register';
@@ -193,44 +194,60 @@ If you have any questions or concerns about this Privacy Policy, please contact 
   }
 
   //register function
- 
 
   Future<void> _registerPatient() async {
-  if (!_agreedToPrivacyPolicy || !term_conditionAgreement) {
-    _showRequiredInformationDialog(
-      'Terms and Privacy Policy Agreement',
-      'Please agree to the Terms and Privacy Policy to proceed.',
-    );
-    return;
-  }
+    if (term_conditionAgreement && privacyPolicyAgreed) {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
 
-  if (_formKey.currentState!.validate()) {
-    _formKey.currentState!.save();
+        final url = 'http://192.168.0.150:3000/api/users/register/patients';
+        final response = await http.post(
+          Uri.parse(url),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            'fullName': _fullName,
+            'email': _email,
+            'password': _password,
+            'birthDate': _selectedDate?.toIso8601String() ?? '',
+          }),
+        );
 
-    final url =
-        'http://192.168.0.150:3000/api/users/register/patients'; // Replace with your backend URL
-    final response = await http.post(Uri.parse(url), body: {
-      'fullName': _fullName, // Use the class-level variable here
-      'email': _email, // Use the class-level variable here
-      'password': _password, // Use the class-level variable here
-      'birthDate': _selectedDate?.toIso8601String() ?? '', // Convert DateTime to ISO 8601 string format
-    });
-
-    if (response.statusCode == 201) {
-      // Registration successful, handle navigation or show a success message
-      // For example, navigate to the login page
-      print(_fullName);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
+        if (response.statusCode == 201) {
+          print(_fullName);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => LoginPage()));
+        } else {
+          print('Response Status Code: ${response.statusCode}');
+          print('Response Body: ${response.body}');
+        }
+      }
     } else {
-      // Registration failed, handle error
-      // You can show an error message to the user
-      print('Registration failed: ${response.body}');
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text(
+                  "Please Check the privacy policy and terms and conditions agreement"),
+              actions: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          });
     }
   }
-}
 
-
+  //email validation
+  bool isValidEmail(String email) {
+    final pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    final regex = RegExp(pattern);
+    return regex.hasMatch(email);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +263,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                 const Padding(
                   padding: EdgeInsets.only(left: 40.0, bottom: 20.0),
                   child: Text(
-                    "Patient Registration",
+                    "Register Here",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                   ),
                 ),
@@ -265,8 +282,9 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your full name';
+                      return 'Please enter your email';
                     }
+                    // Add email format validation here if needed
                     return null;
                   },
                   onSaved: (value) {
@@ -283,7 +301,6 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
-                  
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     hintText: "Enter Your Email",
@@ -291,8 +308,9 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
+                    }else if (!isValidEmail(value.toString())) {
+                      return 'Invalid Email';
                     }
-                    // Add email format validation here if needed
                     return null;
                   },
                   onSaved: (value) {
@@ -346,7 +364,25 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                     if (value == null || value.isEmpty) {
                       return 'Please enter your password';
                     }
-                    // Add password complexity validation here if needed
+
+                    if (value.length < 8) {
+                      return 'Password must be at least 8 characters';
+                    }
+
+                    if (!value.contains(RegExp(r'[A-Z]'))) {
+                      return 'Password must contain at least one uppercase letter';
+                    }
+
+                    if (!value.contains(RegExp(r'[a-z]'))) {
+                      return 'Password must contain at least one lowercase letter';
+                    }
+
+                    if (!value.contains(RegExp(r'[0-9]'))) {
+                      return 'Password must contain at least one digit';
+                    }
+
+                    // Add more checks for special characters if desired
+
                     return null;
                   },
                   onSaved: (value) {
@@ -372,7 +408,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                       return 'Please confirm your password';
                     }
                     // Add password matching validation here
-                    if (value != _password) {
+                    if (_confirmPassword != _password) {
                       return 'Passwords do not match';
                     }
                     return null;
@@ -394,8 +430,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                     ),
                     Expanded(
                       child: Text("I agree to Privacy Policy"),
-                    ) //TODO : make it to navigate to privacy policy page when text is clicked
-                    ,
+                    ),
                     Expanded(
                       child: TextButton(
                           onPressed: () {
