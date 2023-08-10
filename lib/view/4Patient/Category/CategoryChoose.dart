@@ -1,5 +1,8 @@
+import 'package:doctor/controller/Provider.dart';
 import 'package:doctor/view/4Patient/individualDoctorsInfo/IndividualDoctorsInfo.dart';
+import 'package:doctor/view/doctorsPage/doctor_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/listCategory.dart';
 
@@ -224,6 +227,7 @@ class _CategoryChoiceState extends State<CategoryChoice> {
         ));
       }
     }
+    final patientProvider = Provider.of<PatientProvider>(context);
 
     return Scaffold(
       body: Center(
@@ -233,7 +237,7 @@ class _CategoryChoiceState extends State<CategoryChoice> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
@@ -243,7 +247,7 @@ class _CategoryChoiceState extends State<CategoryChoice> {
                           'Hello ,',
                           style: TextStyle(fontSize: 17, color: Colors.grey),
                         ),
-                        Text('Patient Name',
+                        Text('${patientProvider.patient?.email}',
                             style:
                                 TextStyle(fontSize: 25, color: Colors.black)),
                       ],
@@ -340,7 +344,9 @@ class _CategoryChoiceState extends State<CategoryChoice> {
                   ),
                   TextButton(
                     child: const Text("See All"),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DoctorPage()));
+                    },
                   )
                 ],
               ),

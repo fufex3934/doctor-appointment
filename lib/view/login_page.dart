@@ -1,12 +1,18 @@
 import 'dart:convert';
 
+import 'package:doctor/controller/Provider.dart';
+import 'package:doctor/model/listCategory.dart';
 import 'package:doctor/view/4Doctor/today_appointments.dart';
 import 'package:doctor/view/4Patient/BookAppointment/bookAppointment.dart';
 import 'package:doctor/view/4Patient/Category/CategoryChoose.dart';
 import 'package:doctor/view/Registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+ 
+import 'package:provider/provider.dart';
+ 
 import './forgot_password.dart';
+ 
 
 class LoginPage extends StatefulWidget {
   static const routeName = 'login';
@@ -24,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   String _email = '';
   String _password = '';
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     Future<bool> DoctorsLogin() async {
@@ -34,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
 
       return (response.body == 'true');
     }
+    final patentProvider = Provider.of<PatientProvider>(context, listen: false);
 
     return Scaffold(
       resizeToAvoidBottomInset:
@@ -161,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                     print(authenticated);
                     switch (selectedOption) {
                       case "Doctor":
-                        print("selected doctor and reached here");
+                        patentProvider.setPatient(Patient(fullname: "Patient", email: _email));
                         Navigator.push(
                             context,
                             MaterialPageRoute(

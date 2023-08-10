@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:doctor/model/listCategory.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -24,27 +25,33 @@ class DoctorPage extends StatefulWidget {
   @override
   _DoctorPageState createState() => _DoctorPageState();
 }
+RatingStars rs = RatingStars(rating: 3);
 
 class _DoctorPageState extends State<DoctorPage> {
   late GoogleMapController _mapController;
   LatLng _userLocation = LatLng(0, 0); // User's current location
   Set<Marker> _markers = {}; // Set of markers
 
-  List<Doctor> _doctors = [
-    Doctor(
-      name: 'Dr. Novida Navara',
-      specialty: 'Heart Break Specialist',
-      imagePath: 'assets/images/doctor1.jpg',
-    ),
-    Doctor(
+  List<DoctorsList> _doctors = [
+    DoctorsList(
+        name: 'Dr. Novida Navara',
+        Speciality: 'Heart Break Specialist',
+        bg: 'assets/images/doctor1.jpg',
+        Image: Text('assets/images/doctor1.jpg'),
+        Rating: 3),
+    DoctorsList(
       name: 'Dr. Romans Begins',
-      specialty: 'Internal Organ Specialist',
-      imagePath: 'assets/images/doctor4.jpg',
+      Speciality: 'Internal Organ Specialist',
+      bg: 'assets/images/doctor4.jpg',
+        Image: Text('assets/images/doctor4.jpg'),
+      Rating:5,
     ),
-    Doctor(
+    DoctorsList(
       name: 'Dr. Fufa Wakgari',
-      specialty: 'Brain Break Specialist',
-      imagePath: 'assets/images/doctor2.jpg',
+      Speciality: 'Brain Break Specialist',
+      bg: 'assets/images/doctor2.jpg',
+        Image: Text('assets/images/doctor2.jpg'),
+      Rating: 2
     ),
   ];
 
@@ -70,14 +77,15 @@ class _DoctorPageState extends State<DoctorPage> {
     _markers.clear();
 
     // Add doctor markers
-    for (Doctor doctor in _doctors) {
+    for (DoctorsList doctor in _doctors) {
       _markers.add(
         Marker(
           markerId: MarkerId(doctor.name),
-          position: LatLng(_userLocation.latitude + Random().nextDouble() / 10, _userLocation.longitude + Random().nextDouble() / 10),
+          position: LatLng(_userLocation.latitude + Random().nextDouble() / 10,
+              _userLocation.longitude + Random().nextDouble() / 10),
           infoWindow: InfoWindow(
             title: doctor.name,
-            snippet: doctor.specialty,
+            snippet: doctor.Speciality,
           ),
         ),
       );
@@ -144,7 +152,8 @@ class _DoctorPageState extends State<DoctorPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const CircleAvatar(
-                        backgroundImage: AssetImage('assets/images/heartbeat.png'),
+                        backgroundImage:
+                            AssetImage('assets/images/heartbeat.png'),
                         backgroundColor: Colors.white,
                       ),
                       const SizedBox(width: 20),
@@ -205,7 +214,8 @@ class _DoctorPageState extends State<DoctorPage> {
                         tiltGesturesEnabled: false,
                         zoomGesturesEnabled: false,
                         indoorViewEnabled: false,
-                        minMaxZoomPreference: const MinMaxZoomPreference(10, 18),
+                        minMaxZoomPreference:
+                            const MinMaxZoomPreference(10, 18),
                         mapType: MapType.normal,
                         trafficEnabled: false,
                         liteModeEnabled: false,
@@ -270,7 +280,7 @@ class _DoctorPageState extends State<DoctorPage> {
                         child: Row(
                           children: [
                             CircleAvatar(
-                              backgroundImage: AssetImage(doctor.imagePath),
+                              backgroundImage: AssetImage(doctor.bg),
                             ),
                             const SizedBox(width: 10),
                             Column(
@@ -284,12 +294,27 @@ class _DoctorPageState extends State<DoctorPage> {
                                   ),
                                 ),
                                 Text(
-                                  doctor.specialty,
+                                  doctor.Speciality,
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w200,
                                   ),
                                 ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: List.generate(5, (index) {
+                                    return IconTheme(
+                                      data: IconThemeData(
+                                        color:
+                                        index < RatingStars(rating: doctor.Rating).rating.floor()
+                                            ? rs.color
+                                            : rs.borderColor,
+                                        size: rs.size,
+                                      ),
+                                      child: Icon(Icons.star),
+                                    );
+                                  }),
+                                )
                               ],
                             ),
                           ],
