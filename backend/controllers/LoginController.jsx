@@ -11,7 +11,15 @@ const Login = async (req, res) => {
     if (selectedLoginOption === "Doctor") {
       await Doctor.findOne({ email: email, password: password })
         .then((val) => {
-          if (val.length > 0) {
+          console.log(
+            "email",
+            email,
+            "password",
+            password,
+            " returned value ",
+            val
+          );
+          if (val.length !==null) {
             res.send(true);
           } else {
             res.send(false);

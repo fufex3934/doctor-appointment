@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:doctor/view/4Doctor/today_appointments.dart';
 import 'package:doctor/view/4Patient/BookAppointment/bookAppointment.dart';
+import 'package:doctor/view/4Patient/Category/CategoryChoose.dart';
 import 'package:doctor/view/Registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +18,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String selectedOption = "Doctor";
-  List<String> options = ["Doctor", "Patient"];
   bool authenticated = false;
   int currentPageIndex = 0;
   String _email = '';
@@ -25,18 +25,13 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    Future<void> DoctorsLogin() async {
+    Future<bool> DoctorsLogin() async {
       final response = await http.post(
-          Uri.parse('http://192.168.0.9:3000/users/Login/${selectedOption}'),
+          Uri.parse('http://192.168.0.169:3000/users/Login/${selectedOption}'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': _email, 'password': _password}));
 
-      // print(
-      //     "Response from Login for${_email} ${_password} ===== > ${response.body == 'true'}");
-
-      setState(() {
-        authenticated = (response.body == 'true');
-      });
+      return (response.body == 'true');
     }
 
     return Scaffold(
@@ -152,35 +147,44 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // print(
                 //     'Login Return from authentication ====> ${authenticated}');
                 if (_formKey.currentState != null &&
                     _formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
-                  DoctorsLogin();
+                  bool authenticated = await DoctorsLogin();
 
-                  if (selectedOption == "Doctor" && authenticated) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TodayAppointments()));
-                  } else if (selectedOption == "Patient" &&
-                      authenticated == true) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => BookAppointment()));
-                  } else {
-                    SnackBar(
-                      content: Text("Please Check your Email or Password"),
-                      shape: Border.all(
-                          color: Colors.red,
-                          style: BorderStyle.solid,
-                          width: 2),
-                      duration: Duration(milliseconds: 1500),
-                    );
+                  if (authenticated) {
+                    print(authenticated);
+                    switch (selectedOption) {
+                      case "Doctor":
+                        print("selected doctor and reached here");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TodayAppointments()));
+                        break;
+                      case "Patient":
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CategoryChoice()));
+                        break;
+                      default:
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text("Please Check your Email or Password"),
+                            shape: Border.all(
+                                color: Colors.red,
+                                style: BorderStyle.solid,
+                                width: 2),
+                            duration: Duration(milliseconds: 1500),
+                          ),
+                        );
+                    }
                   }
                 }
               },
