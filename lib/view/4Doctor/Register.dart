@@ -42,8 +42,7 @@ class _RegisterDoctorState extends State<RegisterDoctor> {
     'Sports Medicine',
     // Add more specializations as needed
   ];
-  String privacyPolicy =
-      '''Privacy Policy
+  String privacyPolicy = '''Privacy Policy
 
 Last updated: [Date]
 
@@ -102,8 +101,7 @@ We may update this Privacy Policy from time to time. The updated version will be
 If you have any questions or concerns about this Privacy Policy, please contact us at [your email address].
 
 ''';
-  String termsAndConditions =
-      ''' 
+  String termsAndConditions = ''' 
   Terms and Conditions
 
   Last updated: [Date]
@@ -177,8 +175,16 @@ If you have any questions or concerns about this Privacy Policy, please contact 
   double lat = 0;
   double long = 0;
 
-  late Position _currentPosition;
-
+  Position _currentPosition = Position(
+    longitude: 0.0,
+    latitude: 0.0,
+    timestamp: DateTime.now(),
+    accuracy: 0.0,
+    altitude: 0.0,
+    heading: 0.0,
+    speed: 0.0,
+    speedAccuracy: 0.0,
+  );
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -310,7 +316,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
     // }
 
     final response = await http.post(
-        Uri.parse('http://192.168.0.9:3000/users/Doctor/RegisterDoctor'),
+        Uri.parse('http://192.168.0.169:3000/users/Doctor/RegisterDoctor'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'fullname': _fullnameController.text,
@@ -411,6 +417,21 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                   validator: (value) {
                     if (_isSubmitted && value!.isEmpty) {
                       return 'Please enter Password';
+                    }
+                    if (value!.length < 8) {
+                      return 'Password must be at least 8 characters';
+                    }
+
+                    if (!value.contains(RegExp(r'[A-Z]'))) {
+                      return 'Password must contain at least one uppercase letter';
+                    }
+
+                    if (!value.contains(RegExp(r'[a-z]'))) {
+                      return 'Password must contain at least one lowercase letter';
+                    }
+
+                    if (!value.contains(RegExp(r'[0-9]'))) {
+                      return 'Password must contain at least one digit';
                     }
                     return null;
                   },
