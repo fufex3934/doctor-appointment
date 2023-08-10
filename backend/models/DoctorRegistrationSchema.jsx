@@ -1,25 +1,28 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const DoctorRegisteration = mongoose.Schema({
+const DoctorRegistration = mongoose.Schema(
+  {
     _id: mongoose.Types.ObjectId,
     fullName: { type: String },
     specialization: {
-        type: String
+      type: String,
     },
     Experience: {
-        type: Number
+      type: Number,
     },
-    email: { type: String},
+    email: { type: String },
     Location: {
-        type: {
-            latitude: Number,
-            longitude: Number,
-        }, _id: false
+      type: {
+        latitude: Number,
+        longitude: Number,
+      },
+      _id: false,
     },
     password: { type: String },
+  },
+  {
+    collection: "Doctor",
+  }
+);
 
-}, {
-    collection: "Doctors"
-});
-
-module.exports = mongoose.model('Doctor', DoctorRegisteration);
+module.exports = mongoose.model("Doctor", DoctorRegistration);

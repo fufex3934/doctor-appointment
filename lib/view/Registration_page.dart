@@ -1,8 +1,6 @@
-import 'package:doctor/model/listCategory.dart';
 import 'package:doctor/view/4Doctor/Register.dart';
 import 'package:doctor/view/4Patient/patient_Registration.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);

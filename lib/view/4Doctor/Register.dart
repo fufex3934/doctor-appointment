@@ -1,11 +1,8 @@
-import 'package:doctor/model/listCategory.dart';
 import 'package:doctor/view/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/io.dart';
 
 class RegisterDoctor extends StatefulWidget {
   @override
@@ -45,7 +42,8 @@ class _RegisterDoctorState extends State<RegisterDoctor> {
     'Sports Medicine',
     // Add more specializations as needed
   ];
-  String privacyPolicy = '''Privacy Policy
+  String privacyPolicy =
+      '''Privacy Policy
 
 Last updated: [Date]
 
@@ -104,7 +102,8 @@ We may update this Privacy Policy from time to time. The updated version will be
 If you have any questions or concerns about this Privacy Policy, please contact us at [your email address].
 
 ''';
-  String termsAndConditions = ''' 
+  String termsAndConditions =
+      ''' 
   Terms and Conditions
 
   Last updated: [Date]
@@ -178,7 +177,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
   double lat = 0;
   double long = 0;
 
-    late Position _currentPosition;
+  late Position _currentPosition;
 
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
@@ -311,7 +310,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
     // }
 
     final response = await http.post(
-        Uri.parse('http://192.168.0.169:5000/users/Doctor/RegisterDoctor'),
+        Uri.parse('http://192.168.0.9:3000/users/Doctor/RegisterDoctor'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'fullname': _fullnameController.text,
