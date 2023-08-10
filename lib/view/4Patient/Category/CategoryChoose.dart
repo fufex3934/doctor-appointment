@@ -243,7 +243,7 @@ class _CategoryChoiceState extends State<CategoryChoice> {
                           'Hello ,',
                           style: TextStyle(fontSize: 17, color: Colors.grey),
                         ),
-                        Text('Doctor Name',
+                        Text('Patient Name',
                             style:
                                 TextStyle(fontSize: 25, color: Colors.black)),
                       ],
