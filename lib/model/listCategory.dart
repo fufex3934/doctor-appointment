@@ -66,3 +66,10 @@ class RegisterModelDoctor {
       required this.loc_long,
       required this.password});
 }
+class Patient {
+  final String fullname;
+  final String email;
+
+  Patient({required this.fullname, required this.email});
+}
+

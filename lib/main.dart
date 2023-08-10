@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'controller/Provider.dart';
 import 'view/splashPage/splash_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => PatientProvider(),
+      child: MyApp(), // Your app's root widget
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -27,5 +34,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
