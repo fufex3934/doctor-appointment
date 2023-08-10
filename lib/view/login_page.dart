@@ -8,7 +8,11 @@ import 'package:doctor/view/4Patient/Category/CategoryChoose.dart';
 import 'package:doctor/view/Registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+ 
 import 'package:provider/provider.dart';
+ 
+import './forgot_password.dart';
+ 
 
 class LoginPage extends StatefulWidget {
   static const routeName = 'login';
@@ -215,7 +219,10 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 10),
             TextButton(
               onPressed: () {
-                // Add forgot password logic here
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ForgotPasswordPage()));
               },
               child: const Text(
                 "Forgot Password?",
