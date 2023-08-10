@@ -18,22 +18,25 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String selectedOption = "Doctor";
   List<String> options = ["Doctor", "Patient"];
+  bool authenticated = false;
   int currentPageIndex = 0;
   String _email = '';
   String _password = '';
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    
-
-    Future<bool> DoctorsLogin() async {
+    Future<void> DoctorsLogin() async {
       final response = await http.post(
-          Uri.parse('http://192.168.0.169:5000/users/Doctor/Login4Doctor'),
+          Uri.parse('http://192.168.0.9:3000/users/Login/${selectedOption}'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': _email, 'password': _password}));
 
-      print(response);
-      return true;
+      // print(
+      //     "Response from Login for${_email} ${_password} ===== > ${response.body == 'true'}");
+
+      setState(() {
+        authenticated = (response.body == 'true');
+      });
     }
 
     return Scaffold(
@@ -150,31 +153,32 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
+                // print(
+                //     'Login Return from authentication ====> ${authenticated}');
                 if (_formKey.currentState != null &&
                     _formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  print(_email);
-                  if (_email == "aa@gmail.com" && _password == "1234") {
-                    if (selectedOption == "Doctor") {
-                      print(_email);
-                      print(_password);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TodayAppointments()));
-                    } else if (selectedOption == "Patient") {
-                      print(_email);
-                      print(_password);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => BookAppointment()));
-                    }
+
+                  DoctorsLogin();
+
+                  if (selectedOption == "Doctor" && authenticated) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TodayAppointments()));
+                  } else if (selectedOption == "Patient" &&
+                      authenticated == true) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BookAppointment()));
                   } else {
                     SnackBar(
                       content: Text("Please Check your Email or Password"),
                       shape: Border.all(
-                          color: Colors.red, style: BorderStyle.solid, width: 2),
+                          color: Colors.red,
+                          style: BorderStyle.solid,
+                          width: 2),
                       duration: Duration(milliseconds: 1500),
                     );
                   }

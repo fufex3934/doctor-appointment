@@ -5,6 +5,7 @@ const cors = require('cors');
 const connectDb = require('./DbConfig/Configuration.jsx');
 const patientRouter = require('./routes/patientsRouter.jsx');
 const DoctorsRouter=require("./routes/DoctorsRouter.jsx")
+const LoginRouter = require("./routes/LoginRouter.jsx")
 const PORT = 3000||process.env.PORT;
 
 
@@ -17,6 +18,7 @@ app.use(cors());
 //routes
 app.use('/api/users',patientRouter);
 app.use('/users/Doctor',DoctorsRouter);
+app.use('/users/Login',LoginRouter)
 //connect to db
 connectDb();
 //start server
