@@ -2,6 +2,7 @@ import 'package:doctor/view/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class PatientRegistration extends StatefulWidget {
   static const routeName = 'patient-register';
@@ -199,6 +200,8 @@ If you have any questions or concerns about this Privacy Policy, please contact 
     if (term_conditionAgreement && privacyPolicyAgreed) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
+        final formattedBirthDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+
 
         final url = 'http://192.168.0.150:3000/api/users/register/patients';
         final response = await http.post(
@@ -208,7 +211,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
             'fullName': _fullName,
             'email': _email,
             'password': _password,
-            'birthDate': _selectedDate?.toIso8601String() ?? '',
+            'birthDate': formattedBirthDate,
           }),
         );
 
