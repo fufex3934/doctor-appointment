@@ -7,7 +7,10 @@ const patientSchema = mongoose.Schema(
     birthDate: { type: Date, required: true },
     password: { type: String, required: true },
   },
- 
+  {
+    collection: "Patient"
+  }
+
 );
 
 module.exports = mongoose.model("Patient", patientSchema);
