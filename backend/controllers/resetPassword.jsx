@@ -4,9 +4,9 @@ const Patient = require("../models/patientsRegistrationModel.jsx");
 const resetPassword = async (req, res) => {
     try {
         const selectedLoginOption = req.params.id;
-        const { email, Newpassword } = req.body;
+        const { email, newPassword } = req.body;
 
-        console.log(email, oldPassword, Newpassword, selectedLoginOption);
+        console.log(email, oldPassword, newPassword, selectedLoginOption);
         console.log(req.body);
         if (selectedLoginOption === "Doctor") {
 
@@ -18,7 +18,7 @@ const resetPassword = async (req, res) => {
             }
             else {
 
-                Doctor.updateOne({ email: email }, { $set: { password: Newpassword } }).then((val) => res.status(200).json({ message: 'Password updated successfully' }))
+                Doctor.updateOne({ email: email }, { $set: { password: newPassword } }).then((val) => res.status(200).json({ message: 'Password updated successfully' }))
             }
 
 
@@ -33,7 +33,7 @@ const resetPassword = async (req, res) => {
 
             else {
 
-                Patient.updateOne({ email: email }, { $set: { password: Newpassword } }).then((val) => res.status(200).json({ message: 'Password updated successfully' }))
+                Patient.updateOne({ email: email }, { $set: { password: newPassword } }).then((val) => res.status(200).json({ message: 'Password updated successfully' }))
             }
         }
     } catch (err) {
