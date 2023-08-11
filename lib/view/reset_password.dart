@@ -1,13 +1,31 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class ResetPasswordPage extends StatefulWidget {
-  const ResetPasswordPage({super.key});
+  final String email;
+  final String selectedOption;
+  const ResetPasswordPage(
+      {super.key, required this.email, required this.selectedOption});
 
   @override
   State<ResetPasswordPage> createState() => _ResetPasswordPageState();
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  String _newPassword = '';
+
+  Future<bool> DoctorsLogin() async {
+    final response = await http.post(
+        Uri.parse(
+            'http://192.168.0.169:3000/users/ForgotPassword/${widget.selectedOption}'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': widget.email, 'newPassword': _newPassword}));
+
+    return (response.body == 'true');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +55,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           'Confirm Password',
           style: TextStyle(fontSize: 16),
         ),
-         SizedBox(height: 20),
+        SizedBox(height: 20),
         TextField(
           decoration: InputDecoration(
             labelText: 'Confirm Your New Password',
