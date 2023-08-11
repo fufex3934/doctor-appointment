@@ -19,7 +19,7 @@ const Login = async (req, res) => {
             " returned value ",
             val
           );
-          if (val.length !==null) {
+          if (val.length !== null) {
             res.send(true);
           } else {
             res.send(false);

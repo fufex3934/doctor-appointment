@@ -9,21 +9,36 @@ const checkEmail = async (req, res) => {
     console.log(req.body);
     if (selectedOption === "Doctor") {
       // Find user by email
-      const doctor = await Doctor.findOne({ email })
+      await Doctor.findOne({ email })
         .then((val) => {
-          res.send(true);
+          if (val.length !== null) {
+            res.send(true);
+            console.log(true, val)
+          } else {
+            res.send(false);
+            console.log(false);
+          }
         })
         .catch((err) => {
+          console.log(false);
           res.send("User not Found");
+
         });
     } else if (selectedOption === "Patient") {
       // Find user by email
-      const Patient = await Patient.findOne({ email })
+      await Patient.findOne({ email })
         .then((val) => {
-          res.send(true);
+          if (val.length !== null) {
+            res.send(true);
+            console.log(true, val)
+          } else {
+            res.send(false);
+            console.log(false);
+          }
         })
         .catch((err) => {
           res.send("User not Found");
+          console.log(false)
         });
     }
   } catch (err) {
@@ -40,32 +55,50 @@ const resetPassword = async (req, res) => {
     console.log(req.body);
     if (selectedLoginOption === "Doctor") {
       // Find user by email
-      const doctor = await Doctor.findOne({ email });
-
-      if (!doctor) {
-        return res.status(404).json({ message: "User not found" });
-      } else {
-        Doctor.updateOne(
-          { email: email },
-          { $set: { password: newPassword } }
-        ).then((val) =>
-          res.status(200).json({ message: "Password updated successfully" })
-        );
-      }
+      const doctor = await Doctor.findOne({ email }).then((val) => {
+        if (val.length !== null) {
+          res.send(true);
+          console.log(true, val)
+          Doctor.updateOne(
+            { email: email },
+            { $set: { password: newPassword } }
+          ).then((val) =>
+            res.status(200).json({ message: "Password updated successfully" })
+          );
+        } else {
+          res.send(false);
+          console.log(false);
+        }
+      })
+        .catch((err) => {
+          res.send("User not Found");
+          console.log(false)
+        });;
+ 
     } else if (selectedLoginOption === "Patient") {
       // Find user by email
-      const patient = await Patient.findOne({ email });
+      const patient = await Patient.findOne({ email }).then((val) => {
+        if (val.length !== null) {
+          res.send(true);
+          console.log(true, val)
+          Doctor.updateOne(
+            { email: email },
+            { $set: { password: newPassword } }
+          ).then((val) =>
+            res.status(200).json({ message: "Password updated successfully" })
+          );
+        } else {
+          res.send(false);
+          console.log(false);
+        }
+      })
+        .catch((err) => {
+          res.send("User not Found");
+          console.log(false)
+        });;
+ ;
 
-      if (!patient) {
-        return res.status(404).json({ message: "User not found" });
-      } else {
-        Patient.updateOne(
-          { email: email },
-          { $set: { password: newPassword } }
-        ).then((val) =>
-          res.status(200).json({ message: "Password updated successfully" })
-        );
-      }
+     
     }
   } catch (err) {
     console.error(err);
