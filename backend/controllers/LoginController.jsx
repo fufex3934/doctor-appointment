@@ -6,8 +6,8 @@ const Login = async (req, res) => {
     const selectedLoginOption = req.params.id;
     const { email, password } = req.body;
 
-    console.log(email, password, selectedLoginOption);
-    console.log(req.body);
+    // console.log(email, password, selectedLoginOption);
+    // console.log(req.body);
     if (selectedLoginOption === "Doctor") {
       await Doctor.findOne({ email: email, password: password })
         .then((val) => {

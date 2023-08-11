@@ -169,13 +169,14 @@ class _LoginPageState extends State<LoginPage> {
                     print(authenticated);
                     switch (selectedOption) {
                       case "Doctor":
-                        patentProvider.setPatient(Patient(fullname: "Patient", email: _email));
+                       
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => TodayAppointments()));
                         break;
                       case "Patient":
+                       patentProvider.setPatient(Patient(fullname: "Patient", email: _email));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
