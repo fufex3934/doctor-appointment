@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Future<bool> DoctorsLogin() async {
       final response = await http.post(
-          Uri.parse('http://192.168.0.169:3000/users/Login/${selectedOption}'),
+          Uri.parse('http://192.168.0.150:3000/users/Login/${selectedOption}'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': _email, 'password': _password}));
 
@@ -169,13 +169,14 @@ class _LoginPageState extends State<LoginPage> {
                     print(authenticated);
                     switch (selectedOption) {
                       case "Doctor":
-                        patentProvider.setPatient(Patient(fullname: "Patient", email: _email));
+                       
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => TodayAppointments()));
                         break;
                       case "Patient":
+                       patentProvider.setPatient(Patient(fullname: "Patient", email: _email));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
