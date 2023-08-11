@@ -71,7 +71,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   Future<bool> ValidateEmail() async {
     final response = await http.post(
-        Uri.parse('http://192.168.0.150:3000/users/ForgotPassword/checkEmail'),
+        Uri.parse('http://192.168.0.169:3000/users/ForgotPassword/checkEmail'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _emailController.text,
@@ -148,6 +148,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         .text); // Print the email entered by the user
                     if (_formKey.currentState!.validate()) {
                       bool userFound = await ValidateEmail();
+                      print("User Found is ==>${userFound}");
                       if (userFound == true) {
                         requestPasswordReset(_emailController.text);
                         setState(() {

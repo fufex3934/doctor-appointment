@@ -19,7 +19,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Future<bool> DoctorsLogin() async {
     final response = await http.post(
         Uri.parse(
-            'http://192.168.0.150:3000/users/ForgotPassword/${widget.selectedOption}'),
+            'http://192.168.0.169:3000/users/ForgotPassword/${widget.selectedOption}'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': widget.email, 'newPassword': _newPassword}));
 
