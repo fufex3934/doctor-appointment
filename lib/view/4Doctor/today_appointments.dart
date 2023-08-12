@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../model/appointment.dart';
 
 class TodayAppointments extends StatefulWidget {
   static const routeName = 'today-appointment';
@@ -7,22 +8,6 @@ class TodayAppointments extends StatefulWidget {
 
   @override
   State<TodayAppointments> createState() => _TodayAppointmentsState();
-}
-
-class AppointmentData {
-  final String doctorName;
-  final String doctorImage;
-  final String assistantName;
-  final String appointmentTime;
-  final Color backgroundColor;
-
-  AppointmentData({
-    required this.doctorName,
-    required this.doctorImage,
-    required this.assistantName,
-    required this.appointmentTime,
-    required this.backgroundColor,
-  });
 }
 
 class _TodayAppointmentsState extends State<TodayAppointments> {
@@ -167,13 +152,13 @@ class _TodayAppointmentsState extends State<TodayAppointments> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                               const CircleAvatar(
+                                const CircleAvatar(
                                   backgroundColor: Colors.white,
                                   child: Icon(
                                     Icons.schedule,
                                   ),
                                 ),
-                               const SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 Text(
                                   appointments[i].appointmentTime,
                                   style: const TextStyle(
@@ -205,8 +190,8 @@ class _TodayAppointmentsState extends State<TodayAppointments> {
                                       quarterTurns:
                                           1, // Rotate 90 degrees (quarter-turns 3)
                                       child: Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 10),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         child: Center(
                                           child: Text(
                                             'Consult',

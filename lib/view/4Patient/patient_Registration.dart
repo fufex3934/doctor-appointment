@@ -203,7 +203,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
         final formattedBirthDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
 
 
-        final url = 'http://192.168.0.150:3000/api/users/register/patients';
+        final url = 'http://localhost:3000/api/users/register/patients';
         final response = await http.post(
           Uri.parse(url),
           headers: {"Content-Type": "application/json"},
