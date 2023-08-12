@@ -19,7 +19,7 @@ const Login = async (req, res) => {
             " returned value ",
             val
           );
-          if (val.length !== null) {
+          if (val!== null) {
             res.send(true);
           } else {
             res.send(false);
@@ -37,7 +37,7 @@ const Login = async (req, res) => {
             " returned value ",
             val
           );
-          if (val !== null) {
+          if (val!== null) {
             res.send(true);
             console.log(val);
           } else {

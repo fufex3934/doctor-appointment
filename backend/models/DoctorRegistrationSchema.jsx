@@ -20,9 +20,7 @@ const DoctorRegistration = mongoose.Schema(
     },
     password: { type: String },
   },
-  {
-    collection: "Doctor",
-  }
+  
 );
 
 module.exports = mongoose.model("Doctor", DoctorRegistration);
