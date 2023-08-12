@@ -316,7 +316,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
     // }
 
     final response = await http.post(
-        Uri.parse('http://192.168.0.150:3000/users/Doctor/RegisterDoctor'),
+        Uri.parse('http://localhost:3000/users/Doctor/RegisterDoctor'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'fullname': _fullnameController.text,

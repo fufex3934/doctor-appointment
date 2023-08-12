@@ -20,33 +20,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool _passwordsMatch = true;
   bool _isPasswordValid = false;
 
-  Future<void> showSuccessModal() async {
+  Future<void> showModal(String title, String content) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Password Updated'),
-          content: Text('Your password has been successfully updated.'),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> showFailureModal() async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Password Update Failed'),
-          content: Text('Failed to update password. Please try again.'),
+          title: Text(title),
+          content: Text(content),
           actions: [
             ElevatedButton(
               onPressed: () {
@@ -63,7 +43,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Future<bool> doctorsLogin() async {
     final response = await http.post(
       Uri.parse(
-          'http://192.168.0.150:3000/users/ForgotPassword/${widget.selectedOption}'),
+          'http://localhost:3000/users/ForgotPassword/${widget.selectedOption}'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(
           {'email': widget.email, 'newPassword': _newPasswordController.text}),
@@ -124,7 +104,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   errorText: _passwordsMatch
                       ? (_isPasswordValid
                           ? null
-                          : 'Password must be at least 8 characters and contain at least one capital letter and one small letter')
+                          : 'Password must be at least 8 characters and contain at least one capital letter and one small letter'
+                          )
                       : 'Passwords do not match',
                 ),
                 obscureText: true,
@@ -136,10 +117,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     bool passwordChanged = await doctorsLogin();
                     if (passwordChanged == true) {
                       // Password update successful
-                      showSuccessModal();
+                      showModal('Password Updated',
+                          'Your Password has been updated Successfully!');
                     } else if (passwordChanged == false) {
                       // Password update failed
-                      showFailureModal();
+                      showModal('Password Update Failed',
+                          'Failed to update password. Please try again.');
                     }
                   }
                 },

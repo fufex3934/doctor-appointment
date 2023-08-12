@@ -11,7 +11,7 @@ const checkEmail = async (req, res) => {
       // Find user by email
       await Doctor.findOne({ email })
         .then((val) => {
-          if (val.length !== null) {
+          if (val!== null) {
             res.send(true);
             console.log(true, val);
           } else {
@@ -27,7 +27,7 @@ const checkEmail = async (req, res) => {
       // Find user by email
       await Patient.findOne({ email })
         .then((val) => {
-          if (val !== null) {
+          if (val!== null) {
             res.send(true);
             console.log(true, val);
           } else {
