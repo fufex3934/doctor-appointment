@@ -1,3 +1,4 @@
+import 'package:doctor/view/4Patient/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => PatientProvider(),
-      child: MyApp(), // Your app's root widget
+      child: MaterialApp(home: PatientProfile()), // Your app's root widget
     ),
   );
 }

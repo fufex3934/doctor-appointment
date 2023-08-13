@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import './reset_password.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-import 'package:otp/otp.dart';
 import 'package:randomstring_dart/randomstring_dart.dart';
-import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:doctor/view/Registration_page.dart';
+import '../assets/images/port/deviceIp.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   final selectedOption;
@@ -71,7 +70,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   Future<bool> ValidateEmail() async {
     final response = await http.post(
-        Uri.parse('http://localhost:3000/users/ForgotPassword/checkEmail'),
+        Uri.parse('http://${IpAddress()}:3000/users/ForgotPassword/checkEmail'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _emailController.text,
