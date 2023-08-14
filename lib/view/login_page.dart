@@ -8,11 +8,11 @@ import 'package:doctor/view/4Patient/Category/CategoryChoose.dart';
 import 'package:doctor/view/Registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
- 
+import '../assets/images/port/deviceIp.dart';
+
 import 'package:provider/provider.dart';
- 
+
 import './forgot_password.dart';
- 
 
 class LoginPage extends StatefulWidget {
   static const routeName = 'login';
@@ -35,12 +35,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Future<bool> DoctorsLogin() async {
       final response = await http.post(
-          Uri.parse('http://localhost:3000/users/Login/${selectedOption}'),
+          Uri.parse('http://${IpAddress()}:3000/users/Login/${selectedOption}'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': _email, 'password': _password}));
 
       return (response.body == 'true');
     }
+
     final patentProvider = Provider.of<PatientProvider>(context, listen: false);
 
     return Scaffold(
@@ -169,14 +170,14 @@ class _LoginPageState extends State<LoginPage> {
                     print(authenticated);
                     switch (selectedOption) {
                       case "Doctor":
-                       
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => TodayAppointments()));
                         break;
                       case "Patient":
-                       patentProvider.setPatient(Patient(fullname: "Patient", email: _email));
+                        patentProvider.setPatient(
+                            Patient(fullname: "Patient", email: _email));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -223,7 +224,8 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ForgotPasswordPage(selectedOption:selectedOption)));
+                        builder: (context) => ForgotPasswordPage(
+                            selectedOption: selectedOption)));
               },
               child: const Text(
                 "Forgot Password?",
