@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1039827064599",
+    "project_id": "doctor-appointment-app-chat",
+    "storage_bucket": "doctor-appointment-app-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039827064599:android:ad2358bd5e868d1cd50952",
+        "android_client_info": {
+          "package_name": "com.example.doctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1039827064599-8ikv80mr1pjei9c29fgob0f1kaqredvj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdczxm_5SRpn8jbUu0oO25uGlB9u5ZlG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1039827064599-8ikv80mr1pjei9c29fgob0f1kaqredvj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
