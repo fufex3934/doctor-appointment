@@ -1,5 +1,6 @@
 import 'package:doctor/controller/Provider.dart';
 import 'package:doctor/view/4Patient/individualDoctorsInfo/IndividualDoctorsInfo.dart';
+import 'package:doctor/view/4Patient/profile.dart';
 import 'package:doctor/view/doctorsPage/doctor_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -115,14 +116,6 @@ List<Widget> personCards = menu.map((ele) {
 class _CategoryChoiceState extends State<CategoryChoice> {
   final TextEditingController _searchController = TextEditingController();
 
-  int _currentIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     List<Widget> listDoctors = docList.map((ele) {
@@ -229,6 +222,23 @@ class _CategoryChoiceState extends State<CategoryChoice> {
     }
     final patientProvider = Provider.of<PatientProvider>(context);
 
+    int _selectedIndex = 0;
+
+    // Define the pages corresponding to each tab
+    final List<Widget> _pages = [
+      PatientProfile(), // Profile page
+    ];
+
+    // Function to handle tab navigation
+    void _onTabTapped(int index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => PatientProfile()));
+    }
+
     return Scaffold(
       body: Center(
           child: Container(
@@ -237,23 +247,21 @@ class _CategoryChoiceState extends State<CategoryChoice> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Hello ,',
-                          style: TextStyle(fontSize: 17, color: Colors.grey),
-                        ),
-                        Text('${patientProvider.patient?.email}',
-                            style:
-                                TextStyle(fontSize: 25, color: Colors.black)),
-                      ],
+                    Text(
+                      'Hello ,',
+                      style: TextStyle(fontSize: 17, color: Colors.grey),
                     ),
-                    Icon(Icons.notifications_none)
-                  ]),
+                    Text(
+                        '${patientProvider.patient?.loggedInUserData['fullName']}',
+                        style: TextStyle(fontSize: 25, color: Colors.black)),
+                  ],
+                ),
+                Icon(Icons.notifications_none)
+              ]),
               const SizedBox(
                 height: 30,
               ),
@@ -345,7 +353,10 @@ class _CategoryChoiceState extends State<CategoryChoice> {
                   TextButton(
                     child: const Text("See All"),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DoctorPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DoctorPage()));
                     },
                   )
                 ],
@@ -365,8 +376,8 @@ class _CategoryChoiceState extends State<CategoryChoice> {
       )),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
-        currentIndex: _currentIndex,
-        onTap: _onItemTapped,
+        currentIndex: _selectedIndex,
+        onTap: _onTabTapped,
         selectedItemColor: Colors.blue, // Set selected item color
         unselectedItemColor: Colors.blueGrey, // Set unselected item color
         items: const [
