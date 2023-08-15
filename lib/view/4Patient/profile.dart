@@ -118,18 +118,29 @@ class _PatientProfileState extends State<PatientProfile> {
 //TODO : SAVE EDITED VALUES TO DATABASE
 
   Future<bool> ChangeName(String id, Map<String, dynamic> finalData) async {
+    var uniqueFilename =
+        DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+
     var request = http.MultipartRequest(
       'POST',
       Uri.parse('http://${IpAddress()}:3000/users/patient/profile-edit/$id'),
     );
 
-    if (_imageFileForUpload != null) {
-      var imagePart = await http.MultipartFile.fromPath(
+    // if (_imageFileForUpload != null) {
+    //   var imagePart = await http.MultipartFile.fromPath(
+    //     'profileImage', // Field name on the server for the image
+    //     _imageFileForUpload!.path,
+    //   );
+    //   request.files.add(imagePart);
+    // }
+    request.files.add(
+      http.MultipartFile(
         'profileImage', // Field name on the server for the image
-        _imageFileForUpload!.path,
-      );
-      request.files.add(imagePart);
-    }
+        _image!.readAsBytes().asStream(),
+        _image!.lengthSync(),
+        filename: uniqueFilename, // You can generate a unique filename here
+      ),
+    );
 
     for (var entry in finalData.entries) {
       request.fields[entry.key] = entry.value.toString();
