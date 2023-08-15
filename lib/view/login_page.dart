@@ -29,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   int currentPageIndex = 0;
   String _email = '';
   String _password = '';
+  Map<dynamic, dynamic> User = {};
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -39,7 +40,13 @@ class _LoginPageState extends State<LoginPage> {
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': _email, 'password': _password}));
 
-      return (response.body == 'true');
+      final data = json.decode(response.body);
+
+      setState(() {
+        User = data['value'];
+      });
+      print(User);
+      return (data['status'] == true);
     }
 
     final patentProvider = Provider.of<PatientProvider>(context, listen: false);
@@ -167,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                   bool authenticated = await DoctorsLogin();
 
                   if (authenticated) {
-                    print(authenticated);
+                    print(User);
                     switch (selectedOption) {
                       case "Doctor":
                         Navigator.push(
@@ -176,8 +183,8 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => TodayAppointments()));
                         break;
                       case "Patient":
-                        patentProvider.setPatient(
-                            Patient(fullname: "Patient", email: _email));
+                        patentProvider
+                            .setPatient(Patient(loggedInUserData: User));
                         Navigator.push(
                             context,
                             MaterialPageRoute(

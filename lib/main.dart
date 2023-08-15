@@ -9,7 +9,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => PatientProvider(),
-      child: MaterialApp(home: PatientProfile()), // Your app's root widget
+      child: MaterialApp(home: MyApp()), // Your app's root widget
     ),
   );
 }

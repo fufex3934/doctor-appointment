@@ -7,6 +7,7 @@ const patientRouter = require('./routes/patientsRouter.jsx');
 const DoctorsRouter=require("./routes/DoctorsRouter.jsx")
 const LoginRouter = require("./routes/LoginRouter.jsx")
 const PasswordResetRouter = require("./routes/PasswordResetRouter.jsx")
+const EditPatientProfileRouter =require("./routes/EditPatientProfile.jsx")
 const PORT = 3000||process.env.PORT;
 
 
@@ -21,6 +22,7 @@ app.use('/api/users',patientRouter);
 app.use('/users/Doctor',DoctorsRouter);
 app.use('/users/Login',LoginRouter)
 app.use('/users/ForgotPassword',PasswordResetRouter)
+app.use("/users/patient",EditPatientProfileRouter)
 //connect to db
 connectDb();
 //start server
