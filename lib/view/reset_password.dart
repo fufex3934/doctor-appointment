@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../assets/images/port/deviceIp.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   final String email;
@@ -43,7 +44,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Future<bool> doctorsLogin() async {
     final response = await http.post(
       Uri.parse(
-          'http://localhost:3000/users/ForgotPassword/${widget.selectedOption}'),
+          'http://${IpAddress()}:3000/users/ForgotPassword/${widget.selectedOption}'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(
           {'email': widget.email, 'newPassword': _newPasswordController.text}),
@@ -104,8 +105,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   errorText: _passwordsMatch
                       ? (_isPasswordValid
                           ? null
-                          : 'Password must be at least 8 characters and contain at least one capital letter and one small letter'
-                          )
+                          : 'Password must be at least 8 characters and contain at least one capital letter and one small letter')
                       : 'Passwords do not match',
                 ),
                 obscureText: true,

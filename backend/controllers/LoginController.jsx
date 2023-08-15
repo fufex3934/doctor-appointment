@@ -20,7 +20,7 @@ const Login = async (req, res) => {
             val
           );
           if (val!== null) {
-            res.send(true);
+            res.json({status:true,value:val});
           } else {
             res.send(false);
           }
@@ -38,7 +38,7 @@ const Login = async (req, res) => {
             val
           );
           if (val!== null) {
-            res.send(true);
+            res.json({status:true,value:val});
             console.log(val);
           } else {
             res.send(false);

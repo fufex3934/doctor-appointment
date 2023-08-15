@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import '../../assets/images/port/deviceIp.dart';
 
 class PatientRegistration extends StatefulWidget {
   static const routeName = 'patient-register';
@@ -200,10 +201,10 @@ If you have any questions or concerns about this Privacy Policy, please contact 
     if (term_conditionAgreement && privacyPolicyAgreed) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        final formattedBirthDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+        final formattedBirthDate =
+            DateFormat('yyyy-MM-dd').format(_selectedDate!);
 
-
-        final url = 'http://localhost:3000/api/users/register/patients';
+        final url = 'http://${IpAddress()}:3000/api/users/register/patients';
         final response = await http.post(
           Uri.parse(url),
           headers: {"Content-Type": "application/json"},
@@ -270,17 +271,10 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                   ),
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  "Full Name",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
                 const SizedBox(height: 8),
                 TextFormField(
                   decoration: const InputDecoration(
+                    label: Text('Full Name'),
                     hintText: "Enter Your Full Name",
                   ),
                   validator: (value) {
@@ -294,24 +288,16 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                     _fullName = value!;
                   },
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  "Email",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 8),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
+                    label: Text('Email'),
                     hintText: "Enter Your Email",
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
-                    }else if (!isValidEmail(value.toString())) {
+                    } else if (!isValidEmail(value.toString())) {
                       return 'Invalid Email';
                     }
                     return null;
@@ -320,15 +306,6 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                     _email = value!;
                   },
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  "Birth Date",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 8),
                 InkWell(
                   onTap: () => _selectDate(context),
                   child: Row(
@@ -349,18 +326,10 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  "Password",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 8),
                 TextFormField(
                   obscureText: true,
                   decoration: const InputDecoration(
+                    label: Text('Password'),
                     hintText: "Enter Your Password",
                   ),
                   validator: (value) {
@@ -392,18 +361,10 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                     _password = value!;
                   },
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  "Confirm Password",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 8),
                 TextFormField(
                   obscureText: true,
                   decoration: const InputDecoration(
+                    label: Text('Confirm Password'),
                     hintText: "Confirm Your Password",
                   ),
                   validator: (value) {
@@ -444,6 +405,9 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                     )
                   ],
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   children: [
                     Checkbox(
@@ -462,8 +426,11 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                                 'Terms and Condition', termsAndConditions);
                           },
                           child: Text("Read...")),
-                    )
+                    ),
                   ],
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Row(
                   children: [
@@ -480,22 +447,28 @@ If you have any questions or concerns about this Privacy Policy, please contact 
                         )), //takes the doctor from registration to login
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: _registerPatient,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff1e40af),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: _registerPatient,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff1e40af),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    child: Center(
-                      child: Text(
-                        "Register",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Center(
+                        child: Text(
+                          "Register",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),

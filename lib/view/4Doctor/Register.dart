@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../../assets/images/port/deviceIp.dart';
 
 class RegisterDoctor extends StatefulWidget {
   @override
@@ -42,7 +43,8 @@ class _RegisterDoctorState extends State<RegisterDoctor> {
     'Sports Medicine',
     // Add more specializations as needed
   ];
-  String privacyPolicy = '''Privacy Policy
+  String privacyPolicy =
+      '''Privacy Policy
 
 Last updated: [Date]
 
@@ -101,7 +103,8 @@ We may update this Privacy Policy from time to time. The updated version will be
 If you have any questions or concerns about this Privacy Policy, please contact us at [your email address].
 
 ''';
-  String termsAndConditions = ''' 
+  String termsAndConditions =
+      ''' 
   Terms and Conditions
 
   Last updated: [Date]
@@ -316,7 +319,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
     // }
 
     final response = await http.post(
-        Uri.parse('http://localhost:3000/users/Doctor/RegisterDoctor'),
+        Uri.parse('http://${IpAddress()}:3000/users/Doctor/RegisterDoctor'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'fullname': _fullnameController.text,

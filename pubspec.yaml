@@ -42,9 +42,13 @@ dependencies:
   otp: ^3.1.4
   randomstring_dart: ^0.0.4
   crypto: ^3.0.3
+
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.2
   cloud_firestore: ^4.8.4
+
+  image_picker: ^1.0.2
+
 
 flutter_native_splash:
   background_image: "./lib/assets/images/splash3.png"

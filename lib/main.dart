@@ -1,7 +1,11 @@
+
 import 'package:doctor/view/Chating/send_message.dart';
 import 'package:doctor/view/Chating/retrieve_message.dart';
 import 'package:doctor/view/customer_support.dart';
 import 'package:flutter/foundation.dart';
+=======
+import 'package:doctor/view/4Patient/profile.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -25,8 +29,12 @@ void main() async {
 
     ChangeNotifierProvider(
       create: (context) => PatientProvider(),
+
       child: MyApp(),
       // Your app's root widget
+=======
+//       child: MaterialApp(home: MyApp()), // Your app's root widget
+
     ),
   );
 }
