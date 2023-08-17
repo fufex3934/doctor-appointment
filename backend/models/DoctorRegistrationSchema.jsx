@@ -18,6 +18,22 @@ const DoctorRegistration = mongoose.Schema(
       },
       _id: false,
     },
+    Request:{
+      type: [{
+        RequesterId: {
+          type: String,
+        },
+        Overview: {
+          type:String
+        },
+        _id:false
+      },
+          
+        ]
+    },
+    Patients: {
+      type:[String]
+    },
     password: { type: String },
   },
   

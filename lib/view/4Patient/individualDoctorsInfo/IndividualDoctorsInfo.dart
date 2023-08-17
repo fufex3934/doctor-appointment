@@ -143,66 +143,66 @@ class IndDoctorsInfo extends StatelessWidget {
                       "containing Lorem Ipsum passages, "
                       "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."),
             ),
-            Text(
-              "Schedule",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                OutlinedButton(
-                  onPressed: () {},
-                  child: Text("18"),
-                  style: ButtonStyle(
-                    // backgroundColor: MaterialStateProperty.all(Colors.indigo),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                    ),
-                  ),
-                ),
-                OutlinedButton(
-                  onPressed: () {},
-                  child: Text("19"),
-                  style: ButtonStyle(
-                    // backgroundColor: MaterialStateProperty.all(Colors.indigo),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                    ),
-                  ),
-                ),
-                OutlinedButton(
-                  onPressed: () {},
-                  child: Text("20"),
-                  style: ButtonStyle(
-                    // backgroundColor: MaterialStateProperty.all(Colors.indigo),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                    ),
-                  ),
-                ),
-                OutlinedButton(
-                  onPressed: () {},
-                  child: Text("21"),
-                  style: ButtonStyle(
-                    // backgroundColor: MaterialStateProperty.all(Colors.indigo),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
+            // Text(
+            //   "Schedule",
+            //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            // ),
+            // SizedBox(
+            //   height: 8,
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     OutlinedButton(
+            //       onPressed: () {},
+            //       child: Text("18"),
+            //       style: ButtonStyle(
+            //         // backgroundColor: MaterialStateProperty.all(Colors.indigo),
+            //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //           RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.all(Radius.circular(10)),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     OutlinedButton(
+            //       onPressed: () {},
+            //       child: Text("19"),
+            //       style: ButtonStyle(
+            //         // backgroundColor: MaterialStateProperty.all(Colors.indigo),
+            //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //           RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.all(Radius.circular(10)),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     OutlinedButton(
+            //       onPressed: () {},
+            //       child: Text("20"),
+            //       style: ButtonStyle(
+            //         // backgroundColor: MaterialStateProperty.all(Colors.indigo),
+            //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //           RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.all(Radius.circular(10)),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     OutlinedButton(
+            //       onPressed: () {},
+            //       child: Text("21"),
+            //       style: ButtonStyle(
+            // backgroundColor: MaterialStateProperty.all(Colors.indigo),
+            //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //           RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.all(Radius.circular(10)),
+            //           ),
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
             SizedBox(
               height: 10,
             ),
@@ -215,7 +215,9 @@ class IndDoctorsInfo extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BookAppointment()));
+                          builder: (context) => BookAppointment(
+                                doctorId: doctorInfo.doctorId,
+                              )));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

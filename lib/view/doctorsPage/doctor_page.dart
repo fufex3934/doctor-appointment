@@ -18,13 +18,15 @@ class Doctor {
 }
 
 class DoctorPage extends StatefulWidget {
-  static const routeName = 'doctor-page';
+  static const routeName = 'doctor-p age';
+  final List<DoctorsList> data;
 
-  const DoctorPage({Key? key}) : super(key: key);
+  const DoctorPage({Key? key, required this.data}) : super(key: key);
 
   @override
   _DoctorPageState createState() => _DoctorPageState();
 }
+
 RatingStars rs = RatingStars(rating: 3);
 
 class _DoctorPageState extends State<DoctorPage> {
@@ -34,25 +36,27 @@ class _DoctorPageState extends State<DoctorPage> {
 
   List<DoctorsList> _doctors = [
     DoctorsList(
+        id: "",
         name: 'Dr. Novida Navara',
         Speciality: 'Heart Break Specialist',
         bg: 'assets/images/doctor1.jpg',
         Image: Text('assets/images/doctor1.jpg'),
         Rating: 3),
     DoctorsList(
+      id: "",
       name: 'Dr. Romans Begins',
       Speciality: 'Internal Organ Specialist',
       bg: 'assets/images/doctor4.jpg',
-        Image: Text('assets/images/doctor4.jpg'),
-      Rating:5,
+      Image: Text('assets/images/doctor4.jpg'),
+      Rating: 5,
     ),
     DoctorsList(
-      name: 'Dr. Fufa Wakgari',
-      Speciality: 'Brain Break Specialist',
-      bg: 'assets/images/doctor2.jpg',
+        id: "",
+        name: 'Dr. Fufa Wakgari',
+        Speciality: 'Brain Break Specialist',
+        bg: 'assets/images/doctor2.jpg',
         Image: Text('assets/images/doctor2.jpg'),
-      Rating: 2
-    ),
+        Rating: 2),
   ];
 
   @override
@@ -77,7 +81,10 @@ class _DoctorPageState extends State<DoctorPage> {
     _markers.clear();
 
     // Add doctor markers
-    for (DoctorsList doctor in _doctors) {
+    for (DoctorsList doctor in widget.data) {
+      // var location = doctor.Location;
+      // var latitude = location['latitude'];
+      // var longitude = location['longitude'];
       _markers.add(
         Marker(
           markerId: MarkerId(doctor.name),
@@ -94,6 +101,26 @@ class _DoctorPageState extends State<DoctorPage> {
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
+  }
+
+  int _selectedIndex = 0;
+
+  // Define the pages corresponding to each tab
+  final List<Widget> _pages = [
+    // CategoryChoice(),
+    // ChatPage(senderEmail:patientProvider.patient?.loggedInUserData['email'],senderId:patientProvider.patient?.loggedInUserData['_id']),
+    // ChatPage(senderEmail:patientProvider.patient?.loggedInUserData['email'],senderId:patientProvider.patient?.loggedInUserData['_id']),
+    // PatientProfile(),
+  ];
+
+  // Function to handle tab navigation
+  void _onTabTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Navigator.push(context,
+    //     MaterialPageRoute(builder: (context) => _pages[_selectedIndex]));
   }
 
   @override
@@ -226,7 +253,7 @@ class _DoctorPageState extends State<DoctorPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 40.0),
             Row(
               children: [
                 const Text(
@@ -237,96 +264,121 @@ class _DoctorPageState extends State<DoctorPage> {
                     fontFamily: "Raleway",
                   ),
                 ),
-                const Spacer(),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text("see all"),
-                ),
               ],
             ),
             const SizedBox(height: 20),
-            Column(
-              children: _doctors.map((doctor) {
-                return Dismissible(
-                  key: Key(doctor.name),
-                  direction: DismissDirection.horizontal,
-                  onDismissed: null,
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(right: 20.0),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF1E40AF),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
+            SingleChildScrollView(
+              child: Column(
+                children: widget.data.map((doctor) {
+                  return Dismissible(
+                    key: Key(doctor.name),
+                    direction: DismissDirection.horizontal,
+                    onDismissed: null,
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20.0),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF1E40AF),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
                       ),
-                    ),
-                    child: const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.more_horiz,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: AssetImage(doctor.bg),
-                            ),
-                            const SizedBox(width: 10),
-                            Column(
-                              children: [
-                                Text(
-                                  doctor.name,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: "Raleway",
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Text(
-                                  doctor.Speciality,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w200,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: List.generate(5, (index) {
-                                    return IconTheme(
-                                      data: IconThemeData(
-                                        color:
-                                        index < RatingStars(rating: doctor.Rating).rating.floor()
-                                            ? rs.color
-                                            : rs.borderColor,
-                                        size: rs.size,
-                                      ),
-                                      child: Icon(Icons.star),
-                                    );
-                                  }),
-                                )
-                              ],
-                            ),
-                          ],
+                      child: const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.more_horiz,
+                          color: Colors.black,
                         ),
                       ),
                     ),
-                  ),
-                );
-              }).toList(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: AssetImage(doctor.bg),
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                children: [
+                                  Text(
+                                    doctor.name,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: "Raleway",
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    doctor.Speciality,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w200,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: List.generate(5, (index) {
+                                      return IconTheme(
+                                        data: IconThemeData(
+                                          color: index <
+                                                  RatingStars(
+                                                          rating: doctor.Rating)
+                                                      .rating
+                                                      .floor()
+                                              ? rs.color
+                                              : rs.borderColor,
+                                          size: rs.size,
+                                        ),
+                                        child: Icon(Icons.star),
+                                      );
+                                    }),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
+        currentIndex: _selectedIndex,
+        onTap: _onTabTapped,
+        selectedItemColor: Colors.blue, // Set selected item color
+        unselectedItemColor: Colors.blueGrey, // Set unselected item color
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month_rounded),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

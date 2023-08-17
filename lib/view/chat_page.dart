@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatPage extends StatefulWidget {
+  final String senderEmail;
+  final String senderId;
+
+  ChatPage({required this.senderEmail, required this.senderId});
+
   @override
   _ChatPageState createState() => _ChatPageState();
 }
@@ -10,12 +16,29 @@ class _ChatPageState extends State<ChatPage> {
 
   TextEditingController messageController = TextEditingController();
 
-  void _sendMessage() {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+// Sending a message
+  Future<void> _sendMessage() async {
     if (messageController.text.trim().isNotEmpty) {
-      setState(() {
-        messages.add(messageController.text);
-        messageController.clear();
+      // setState(() {
+      //   messages.add(messageController.text);
+      //   messageController.clear();
+      // });
+
+      print(
+          "Data when sending message ${messageController.text} ${widget.senderId} ${widget.senderEmail}");
+
+      await firestore.collection('messages').add({
+        'text': messageController.text,
+        'senderUid':
+            widget.senderId, // Use the UID from your custom authentication
+        'senderEmail':
+            widget.senderEmail, // Use the email from your custom authentication
+        'timestamp': FieldValue.serverTimestamp(),
       });
+    } else {
+      print("message is empty"); //TODO: add snackbar message to show this error
     }
   }
 
@@ -34,7 +57,8 @@ class _ChatPageState extends State<ChatPage> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text('Chat Information'),
-                    content: Text('This chat is for communication between patient and your doctor.'),
+                    content: Text(
+                        'This chat is for communication between patient and  doctor.'),
                     actions: [
                       TextButton(
                         onPressed: () {
@@ -69,7 +93,8 @@ class _ChatPageState extends State<ChatPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   trailing: Icon(
                     Icons.check_circle,
                     color: Colors.green,
@@ -90,7 +115,8 @@ class _ChatPageState extends State<ChatPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
                   ),
                 ),
