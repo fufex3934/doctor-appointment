@@ -7,18 +7,25 @@ const EditPatientProfile = async (req, res) => {
   const id = req.params.id;
   const { name, profileImage, Age, Gender, DOB, Fathers_Name, Mothers_Name, Blood_Type, Weight, Height, Alergy, Place, Phone, Alt_Phone ,Email,userId } = req.body;
   const list= ['nameAndImage', 'profileInfo', 'addressInfo'];
+  
 
   try {
+     
+    console.log("request parameter :",req);
     console.log(req.body);
    
+
+     
     console.log("parameter id : ", id);
 
    
     if (id === list[0]) {
+      const url = req.protocol + "://" + req.hostname +"/"+ req.file.destination;
+      const  Photo = url+ req.file.originalname;
       Patient.updateOne({ _id:  (userId) }, {
         $set: {
           fullName: name,
-          profileImage: profileImage,
+          profileImage: Photo,
         }
       }).then((val) => { res.send("true"); console.log(val)}).catch(err => console.error(err));
     }
@@ -45,6 +52,7 @@ const EditPatientProfile = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    res.send(error)
   }
 };
 

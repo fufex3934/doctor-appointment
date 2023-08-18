@@ -8,13 +8,15 @@ class Category {
 }
 
 class DoctorsList {
+  String id;
   String name;
   String Speciality;
   Widget Image;
   double Rating;
   String bg;
   DoctorsList(
-      {required this.name,
+      { required this.id,
+        required this.name,
       required this.Speciality,
       required this.Image,
       required this.Rating,
@@ -36,13 +38,15 @@ class RatingStars {
 }
 
 class IndividualDoctorsInformation {
+  final String doctorId;
   final String name;
   final String speciality;
   final String photo;
   final double Rating;
 
   IndividualDoctorsInformation(
-      {required this.name,
+      {required this.doctorId,
+      required this.name,
       required this.speciality,
       required this.photo,
       required this.Rating}); //biography , number of patient and scheduale to be added

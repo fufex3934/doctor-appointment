@@ -171,7 +171,13 @@ class _LoginPageState extends State<LoginPage> {
                     _formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
-                  bool authenticated = await DoctorsLogin();
+                  try {
+                    setState(() async {
+                      authenticated = await DoctorsLogin();
+                    });
+                  } catch (err) {
+                    print("error occured while logging in :${err}");
+                  }
 
                   if (authenticated) {
                     print(User);

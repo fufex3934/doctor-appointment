@@ -43,8 +43,7 @@ class _RegisterDoctorState extends State<RegisterDoctor> {
     'Sports Medicine',
     // Add more specializations as needed
   ];
-  String privacyPolicy =
-      '''Privacy Policy
+  String privacyPolicy = '''Privacy Policy
 
 Last updated: [Date]
 
@@ -103,8 +102,7 @@ We may update this Privacy Policy from time to time. The updated version will be
 If you have any questions or concerns about this Privacy Policy, please contact us at [your email address].
 
 ''';
-  String termsAndConditions =
-      ''' 
+  String termsAndConditions = ''' 
   Terms and Conditions
 
   Last updated: [Date]

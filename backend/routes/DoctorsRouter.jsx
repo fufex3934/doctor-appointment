@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Doctor = require("../models/DoctorRegistrationSchema.jsx");
+const getDoctors_controller=require("../controllers/getDoctors_controller.jsx")
 const { default: mongoose } = require("mongoose");
 //register patients
 router.post("/RegisterDoctor", async (req, res) => {
@@ -37,5 +38,9 @@ router.post("/RegisterDoctor", async (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+router.get("/get-Doctors", getDoctors_controller.getDoctor);
+router.post("/PatientRequest", getDoctors_controller.addRequest);
+router.get("/get-Requests", getDoctors_controller.getRequest);
 
 module.exports = router;

@@ -9,14 +9,14 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../../../assets/images/port/deviceIp.dart';
 
-class PatientProfile extends StatefulWidget {
-  const PatientProfile({super.key});
+class DoctorProfile extends StatefulWidget {
+  const DoctorProfile({super.key});
 
   @override
-  State<PatientProfile> createState() => _PatientProfileState();
+  State<DoctorProfile> createState() => _DoctorProfileState();
 }
 
-class _PatientProfileState extends State<PatientProfile> {
+class _DoctorProfileState extends State<DoctorProfile> {
   File? _image;
   File? _imageFileForUpload;
 

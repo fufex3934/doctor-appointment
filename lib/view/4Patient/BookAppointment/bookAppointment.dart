@@ -1,8 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:doctor/controller/Provider.dart';
+import '../../../assets/images/port/deviceIp.dart';
 
 class BookAppointment extends StatefulWidget {
-  const BookAppointment({Key? key}) : super(key: key);
+  String doctorId;
+  BookAppointment({required this.doctorId, Key? key}) : super(key: key);
   // Get the current date as the default date
 
   @override
@@ -110,11 +117,32 @@ List<String> time = [
 
 class _BookAppointmentState extends State<BookAppointment> {
   DateTime today = DateTime.now();
+  TextEditingController _overviewController = TextEditingController();
 
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     // setState(() {
     //   today = day;
     // });
+  }
+
+  Future<void> showModal(String title, String content) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // List<Widget> listFreeTimes = time.map((ele) {
@@ -142,6 +170,25 @@ class _BookAppointmentState extends State<BookAppointment> {
 
   @override
   Widget build(BuildContext context) {
+    final patientProvider =
+        Provider.of<PatientProvider>(context, listen: false);
+    Future<void> Send_Request() async {
+      final response = await http.post(
+          Uri.parse('http://${IpAddress()}:3000/users/Doctor/PatientRequest'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'overview': _overviewController.text,
+            'requesterId': patientProvider.patient?.loggedInUserData['_id'],
+            'doctorId': widget.doctorId
+          }));
+
+      if (response.statusCode == 200) {
+        print('message delivered successfully');
+      } else {
+        print('Failed to register student');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -162,61 +209,74 @@ class _BookAppointmentState extends State<BookAppointment> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white12,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.black)),
-              child: TableCalendar(
-                locale: "en_US",
-                rowHeight: 43,
-                headerStyle: HeaderStyle(
-                    formatButtonVisible: false, titleCentered: true),
-                availableGestures: AvailableGestures.all,
-                selectedDayPredicate: (day) => isSameDay(day, today),
-                onDaySelected: _onDaySelected,
-                focusedDay: today,
-                firstDay: DateTime.utc(today.year, today.month, today.day),
-                lastDay: DateTime.utc(2030, 8, 14),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _overviewController,
+                maxLines:
+                    null, // This allows the text field to have multiple lines
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(
+                    hintText: 'Enter your text...',
+                    border: OutlineInputBorder(),
+                    label: Text("Write Overview On Your Request Issue")),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Time",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.black),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(child: buildGrid()),
-            Container(
-              width: double.infinity,
-              height: 49,
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 17),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Make an Appointment"),
-                    Icon(Icons.keyboard_double_arrow_right)
-                  ],
+              // Container(
+              //   decoration: BoxDecoration(
+              //       color: Colors.white12,
+              //       borderRadius: BorderRadius.circular(20),
+              //       border: Border.all(color: Colors.black)),
+              //   child: TableCalendar(
+              //     locale: "en_US",
+              //     rowHeight: 43,
+              //     headerStyle: HeaderStyle(
+              //         formatButtonVisible: false, titleCentered: true),
+              //     availableGestures: AvailableGestures.all,
+              //     selectedDayPredicate: (day) => isSameDay(day, today),
+              //     onDaySelected: _onDaySelected,
+              //     focusedDay: today,
+              //     firstDay: DateTime.utc(today.year, today.month, today.day),
+              //     lastDay: DateTime.utc(2030, 8, 14),
+              //   ),
+              // ),
+              SizedBox(
+                height: 20,
+              ),
+              // Text(
+              //   "Time",
+              //   style: TextStyle(
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: 20,
+              //       color: Colors.black),
+              // ),
+              SizedBox(
+                height: 10,
+              ),
+              // Expanded(child: buildGrid()),
+              Container(
+                width: double.infinity,
+                height: 49,
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 17),
+                child: ElevatedButton(
+                  onPressed: Send_Request,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Make an Appointment"),
+                      Icon(Icons.keyboard_double_arrow_right)
+                    ],
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff0e0985),
+                      shape: ContinuousRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(30)))),
                 ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff0e0985),
-                    shape: ContinuousRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)))),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
