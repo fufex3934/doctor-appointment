@@ -35,6 +35,17 @@ const DoctorRegistration = mongoose.Schema(
       type:[String]
     },
     password: { type: String },
+    age:{type:Number},
+    gender: { type: String },
+    price: { type: String },
+    idImage: { type: String },
+    license: { type: String },
+    profileImage: { type: String },
+    place: { type: String },
+    phone: { type: String },
+    Alt_phone: { type: String },
+    
+    
   },
   
 );

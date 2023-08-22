@@ -75,3 +75,7 @@ class Patient {
   final Map<dynamic, dynamic> loggedInUserData;
   Patient({required this.loggedInUserData});
 }
+class Doctor {
+  final Map<dynamic, dynamic> loggedInUserData;
+  Doctor({required this.loggedInUserData});
+}

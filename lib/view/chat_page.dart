@@ -4,8 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ChatPage extends StatefulWidget {
   final String senderEmail;
   final String senderId;
+  final String recieverEmail;
+  final String recieverId;
 
-  ChatPage({required this.senderEmail, required this.senderId});
+  ChatPage(
+      {required this.senderEmail,
+      required this.senderId,
+      required this.recieverEmail,
+      required this.recieverId});
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -36,12 +42,20 @@ class _ChatPageState extends State<ChatPage> {
         'senderEmail':
             widget.senderEmail, // Use the email from your custom authentication
         'timestamp': FieldValue.serverTimestamp(),
+        "toId": widget.recieverId,
+        "toEmail": widget.recieverEmail
       });
     } else {
       print("message is empty"); //TODO: add snackbar message to show this error
     }
   }
 
+  // recieve a message
+  static Stream<QuerySnapshot<Map<String,dynamic>>> _getAllMessage(String id){
+    return await firestore.collection('chats/${id}/messages').snapshots();
+  }
+ dynamic messages=_getAllMessage("");
+ print("message : ${messages}");
   @override
   Widget build(BuildContext context) {
     return Scaffold(

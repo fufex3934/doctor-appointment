@@ -41,6 +41,7 @@ router.post("/RegisterDoctor", async (req, res) => {
 
 router.get("/get-Doctors", getDoctors_controller.getDoctor);
 router.post("/PatientRequest", getDoctors_controller.addRequest);
-router.get("/get-Requests", getDoctors_controller.getRequest);
+router.get("/get-Requests/:id", getDoctors_controller.getRequest);
+router.get("/get-Patients/:id", getDoctors_controller.getPatients);
 
 module.exports = router;

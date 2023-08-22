@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const patientSchema = mongoose.Schema(
   {
+    _id: mongoose.Types.ObjectId,
     fullName: { type: String },
     email: { type: String },
     birthDate: { type: Date },
@@ -19,6 +20,18 @@ const patientSchema = mongoose.Schema(
     place: { type: String },
     phone: { type: Number },
     Alt_phone: { type: String },
+    Schedule: {
+      type: [
+        {
+          doctorId: {
+          type:String,
+          },
+          Time_Date: {
+            type:String
+          },
+          _id:false
+      }
+    ]}
   },
   {
     collection: "Patient"

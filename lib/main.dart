@@ -14,7 +14,7 @@ Future<void> main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => PatientProvider(),
-      child: MaterialApp(home: MyApp()), // Your app's root widget
+      child:MyApp(), // Your app's root widget
     ),
   );
 }

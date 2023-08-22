@@ -234,11 +234,17 @@ class _CategoryChoiceState extends State<CategoryChoice> {
     final List<Widget> _pages = [
       CategoryChoice(),
       ChatPage(
-          senderEmail: patientProvider.patient?.loggedInUserData['email'],
-          senderId: patientProvider.patient?.loggedInUserData['_id']),
+        senderEmail: patientProvider.patient?.loggedInUserData['email'],
+        senderId: patientProvider.patient?.loggedInUserData['_id'],
+        recieverEmail: "",
+        recieverId: "",
+      ),
       ChatPage(
-          senderEmail: patientProvider.patient?.loggedInUserData['email'],
-          senderId: patientProvider.patient?.loggedInUserData['_id']),
+        senderEmail: patientProvider.patient?.loggedInUserData['email'],
+        senderId: patientProvider.patient?.loggedInUserData['_id'],
+        recieverEmail: "",
+        recieverId: "",
+      ),
       PatientProfile(),
     ];
 

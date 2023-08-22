@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../../../assets/images/port/deviceIp.dart';
+import 'package:file_picker/file_picker.dart';
 
 class DoctorProfile extends StatefulWidget {
   const DoctorProfile({super.key});
@@ -19,6 +20,26 @@ class DoctorProfile extends StatefulWidget {
 class _DoctorProfileState extends State<DoctorProfile> {
   File? _image;
   File? _imageFileForUpload;
+  File? _idImage;
+  PlatformFile? _license;
+  List<int>? _fileBytes;
+
+  // Function to pick an image for the ID field
+  Future<void> _getIdImageFromGallery() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    _updateIdImage(pickedImage);
+  }
+
+  // Update the selected ID image
+  void _updateIdImage(XFile? pickedImage) {
+    setState(() {
+      if (pickedImage != null) {
+        _idImage = File(pickedImage.path);
+      }
+    });
+  }
 
   Future<void> _getImageFromCamera() async {
     final picker = ImagePicker();
@@ -43,18 +64,38 @@ class _DoctorProfileState extends State<DoctorProfile> {
     });
   }
 
+  // for choosing license
+  Future<void> _getLicenseFromGallery() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc', 'jpg'],
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      PlatformFile platformFile = result.files.first;
+      print("Selected File: ${platformFile.name}");
+
+      setState(() {
+        _license = platformFile;
+        _licensePdfController.text = platformFile.name;
+        _fileBytes = null;
+      });
+      // Update your licenseInfo or relevant data as needed
+    }
+  }
+
   // ... other methods ...
 
-  List<Map<String, String>> patientInfo = [
-    {"Age": "38"},
+  List<Map<String, dynamic>> doctorInfo = [
+    {"FullName": "Bekalu Ato"},
+    {"Specialization": "Radiology"},
+    {"Experience": 7},
+    {"Email": "bekalu@gmail.com"},
+    {"Age": 20},
     {"Gender": "M"},
-    {"DOB": "Jan 18 1982"},
-    {"Fathers Name ": "aaaa"},
-    {"Mothers Name ": "bbb"},
-    {"Blood Type ": "A+"},
-    {"Weight": "72"},
-    {"Height": "55'"},
-    {"Alergy": "cccc"}
+    {"Price": '100 Birr'},
+    // {"Id": "Id image"},
+    // {"License": "license"}
   ];
 
   List<Map<String, String>> addressInfo = [
@@ -65,10 +106,11 @@ class _DoctorProfileState extends State<DoctorProfile> {
   ];
 
   bool editProfile = false;
-  bool editPatientInfo = false;
+  bool editDoctorInfo = false;
   bool editAddress = false;
-  TextEditingController _patientNameController = TextEditingController();
-
+  TextEditingController _doctorNameController = TextEditingController();
+  TextEditingController _licensePdfController = TextEditingController();
+  TextEditingController _idController = TextEditingController();
   // Create a list of TextEditingController instances
   List<TextEditingController> _controllers = [];
   List<TextEditingController> _controllersAddress = [];
@@ -78,8 +120,9 @@ class _DoctorProfileState extends State<DoctorProfile> {
     super.initState();
 
     // Initialize TextEditingController instances with initial values
-    for (var info in patientInfo) {
-      _controllers.add(TextEditingController(text: info.values.first));
+    for (var info in doctorInfo) {
+      _controllers
+          .add(TextEditingController(text: info.values.first.toString()));
     }
     for (var address in addressInfo) {
       _controllersAddress
@@ -100,8 +143,8 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
   void onSave() {
     // Iterate through controllers and update the data
-    for (int i = 0; i < patientInfo.length; i++) {
-      patientInfo[i][patientInfo[i].keys.first] = _controllers[i].text;
+    for (int i = 0; i < doctorInfo.length; i++) {
+      doctorInfo[i][doctorInfo[i].keys.first] = _controllers[i].text;
     }
     for (int i = 0; i < addressInfo.length; i++) {
       addressInfo[i][addressInfo[i].keys.first] = _controllersAddress[i].text;
@@ -109,7 +152,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
     // Toggle edit mode after saving
     setState(() {
-      editPatientInfo = !editPatientInfo;
+      editDoctorInfo = !editDoctorInfo;
     });
   }
 
@@ -123,24 +166,46 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://${IpAddress()}:3000/users/patient/profile-edit/$id'),
+      Uri.parse('http://${IpAddress()}:3000/users/doctor/profile-edit/$id'),
     );
 
-    // if (_imageFileForUpload != null) {
-    //   var imagePart = await http.MultipartFile.fromPath(
-    //     'profileImage', // Field name on the server for the image
-    //     _imageFileForUpload!.path,
-    //   );
-    //   request.files.add(imagePart);
-    // }
-    request.files.add(
-      http.MultipartFile(
-        'profileImage', // Field name on the server for the image
-        _image!.readAsBytes().asStream(),
-        _image!.lengthSync(),
-        filename: uniqueFilename, // You can generate a unique filename here
-      ),
-    );
+    if (id != parameters[2] && id != parameters[1]) {
+      request.files.add(
+        http.MultipartFile(
+          'profileImage', // Field name on the server for the image
+          _image!.readAsBytes().asStream(),
+          _image!.lengthSync(),
+          filename: uniqueFilename, // You can generate a unique filename here
+        ),
+      );
+    }
+
+    if (_licensePdfController.text.isNotEmpty) {
+      // Convert the selected PDF file to bytes
+      // List<int> pdfBytes = await _license!.readAsBytes();
+
+      final file = File(_license!.path!);
+      _fileBytes =
+          await file.readAsBytes(); // Convert the selected file to bytes
+
+      // Add the PDF file as a multipart file to the request
+      request.files.add(
+        http.MultipartFile(
+          'licensePdf', // Field name on the server for the PDF file
+          http.ByteStream.fromBytes(_fileBytes!),
+          _fileBytes!.length,
+          filename: _licensePdfController.text,
+        ),
+      );
+    }
+
+    if (_idImage != null) {
+      var idImagePart = await http.MultipartFile.fromPath(
+        'idImage', // Field name on the server for the ID image
+        _idImage!.path,
+      );
+      request.files.add(idImagePart);
+    }
 
     for (var entry in finalData.entries) {
       request.fields[entry.key] = entry.value.toString();
@@ -215,16 +280,19 @@ class _DoctorProfileState extends State<DoctorProfile> {
                               );
                             },
                             child: Container(
-                              margin: EdgeInsets.only(top: 16),
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                              ),
+                              child: editProfile
+                                  ? Container(
+                                      margin: EdgeInsets.only(top: 16),
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.white,
+                                      ))
+                                  : null,
                             ),
                           ),
                         ],
@@ -239,15 +307,15 @@ class _DoctorProfileState extends State<DoctorProfile> {
                               ? SizedBox(
                                   width: 120,
                                   child: TextField(
-                                    controller: _patientNameController,
+                                    controller: _doctorNameController,
                                     decoration:
                                         InputDecoration(labelText: "Name "),
                                   ),
                                 )
                               : Text(
-                                  _patientNameController.text.isEmpty
-                                      ? "patient name".capitalize()
-                                      : _patientNameController.text,
+                                  _doctorNameController.text.isEmpty
+                                      ? "doctor name".capitalize()
+                                      : _doctorNameController.text,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12),
@@ -256,7 +324,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                             height: 2,
                           ),
                           Text(
-                            "Patient Id 12467577".toUpperCase(),
+                            "doctor Id 12467577".toUpperCase(),
                             style: TextStyle(
                                 fontSize: 12, fontWeight: FontWeight.w300),
                           ),
@@ -285,17 +353,17 @@ class _DoctorProfileState extends State<DoctorProfile> {
                                 child: editProfile
                                     ? IconButton(
                                         onPressed: () async {
-                                          print(_patientNameController.text);
+                                          print(_doctorNameController.text);
 
                                           setState(() {
                                             editProfile = false;
                                           });
                                           bool nameChanged =
                                               await ChangeName(parameters[0], {
-                                            "name": _patientNameController.text,
+                                            "name": _doctorNameController.text,
                                             'profileImage': _image,
-                                            "userId": patientProvider.patient
-                                                ?.loggedInUserData['_id']
+                                            "userId": patientProvider
+                                                .doctor?.loggedInUserData['_id']
                                           });
                                           print(nameChanged);
                                         },
@@ -332,7 +400,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                                 width: 10,
                               ),
                               Text(
-                                "Patient Info".capitalize(),
+                                "Doctor Info".capitalize(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               ),
@@ -344,12 +412,12 @@ class _DoctorProfileState extends State<DoctorProfile> {
                                   IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          editPatientInfo = !editPatientInfo;
+                                          editDoctorInfo = !editDoctorInfo;
                                         });
                                       },
                                       icon: Icon(Icons.edit)),
                                   Container(
-                                      child: editPatientInfo
+                                      child: editDoctorInfo
                                           ? IconButton(
                                               onPressed: () async {
                                                 setState(() {
@@ -358,29 +426,24 @@ class _DoctorProfileState extends State<DoctorProfile> {
                                                       i++) {
                                                     print(_controllers[i].text);
                                                   }
-                                                  editPatientInfo = false;
+                                                  editDoctorInfo = false;
                                                 });
                                                 bool nameChanged =
                                                     await ChangeName(
                                                         parameters[1], {
-                                                  "Age": _controllers[0].text,
-                                                  "Gender":
+                                                  "FullName":
+                                                      _controllers[0].text,
+                                                  "Specialization":
                                                       _controllers[1].text,
-                                                  "DOB": _controllers[2].text,
-                                                  "Fathers_Name ":
-                                                      _controllers[3].text,
-                                                  "Mothers_Name ":
-                                                      _controllers[4].text,
-                                                  "Blood_Type ":
+                                                  "Experience":
+                                                      _controllers[2].text,
+                                                  "Email": _controllers[3].text,
+                                                  "Age": _controllers[4].text,
+                                                  "Gender":
                                                       _controllers[5].text,
-                                                  "Weight":
-                                                      _controllers[6].text,
-                                                  "Height":
-                                                      _controllers[7].text,
-                                                  "Alergy":
-                                                      _controllers[8].text,
+                                                  "Price": _controllers[6].text,
                                                   "userId": patientProvider
-                                                      .patient
+                                                      .doctor
                                                       ?.loggedInUserData['_id']
                                                 });
                                                 print(nameChanged);
@@ -397,14 +460,14 @@ class _DoctorProfileState extends State<DoctorProfile> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              for (int i = 0; i < patientInfo.length; i++)
-                                editPatientInfo
+                              for (int i = 0; i < doctorInfo.length; i++)
+                                editDoctorInfo
                                     ? Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "${patientInfo[i].keys.first} :",
+                                            "${doctorInfo[i].keys.first} :",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w300,
                                             ),
@@ -431,7 +494,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            patientInfo[i].keys.first,
+                                            doctorInfo[i].keys.first,
                                             style: TextStyle(
                                               fontWeight: FontWeight.w300,
                                             ),
@@ -439,7 +502,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                                           SizedBox(width: 10),
                                           Text(
                                             _controllers[i].text.isEmpty
-                                                ? patientInfo[i].values.first
+                                                ? doctorInfo[i].values.first
                                                 : _controllers[i].text,
                                             style: TextStyle(
                                                 color: Colors.blueGrey,
@@ -451,7 +514,76 @@ class _DoctorProfileState extends State<DoctorProfile> {
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 5,
+                          ),
+                          Container(
+                            width: 300,
+                            child: Row(children: [
+                              Text("ID Image"),
+                              SizedBox(width: 10),
+                              ElevatedButton(
+                                onPressed: _getIdImageFromGallery,
+                                child: Text("Choose ID"),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Colors.black12, // Background color
+                                  foregroundColor: Colors.white, // Text color
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  textStyle: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  _idImage != null
+                                      ? (_idImage!.path.length > 30
+                                          ? "...${_idImage!.path.substring(_idImage!.path.length - 30)}"
+                                          : _idImage!.path)
+                                      : "No image selected",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ]),
+                          ),
+                          Container(
+                            width: 300,
+                            child: Row(children: [
+                              Text("License"),
+                              SizedBox(width: 10),
+                              ElevatedButton(
+                                onPressed: _getLicenseFromGallery,
+                                child: Text("Add License"),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Colors.black12, // Background color
+                                  foregroundColor: Colors.white, // Text color
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  textStyle: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  _licensePdfController.text.isNotEmpty
+                                      ? _licensePdfController.text
+                                      : "No license selected",
+                                ),
+                              ),
+                            ]),
                           ),
                         ],
                       ),
@@ -520,8 +652,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                                                     _controllersAddress[2].text,
                                                 "Email":
                                                     _controllersAddress[3].text,
-                                                "userId": patientProvider
-                                                    .patient
+                                                "userId": patientProvider.doctor
                                                     ?.loggedInUserData['_id']
                                               });
                                               print(nameChanged);
