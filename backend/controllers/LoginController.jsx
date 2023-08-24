@@ -5,14 +5,10 @@ const Login = async (req, res) => {
   try {
     const selectedLoginOption = req.params.id;
     const { email, password } = req.body;
-    console.log("request parameter :", req);
-    console.log("protocol :", req.protocol);
-    console.log("host :", req.hostname);
-    console.log("port :", req.port);
-    console.log("url :", req.url);
-
-    // console.log(email, password, selectedLoginOption);
-    // console.log(req.body);
+   console.log("===============================")
+    console.log(selectedLoginOption);
+    console.log(req.body);
+    console.log("===============================")
     if (selectedLoginOption === "Doctor") {
       await Doctor.findOne({ email: email, password: password })
         .then((val) => {

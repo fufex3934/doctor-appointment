@@ -1,5 +1,3 @@
-
-
 import 'package:doctor/view/Chating/send_message.dart';
 import 'package:doctor/view/Chating/retrieve_message.dart';
 import 'package:doctor/view/customer_support.dart';
@@ -15,14 +13,13 @@ import 'view/splashPage/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//   options: DefaultFirebaseOptions.currentPlatform,
+// );
 
 void main() async {
-
   //for the fire base setup
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -30,15 +27,12 @@ void main() async {
 
   // till this line dont touch it
   runApp(
-
     ChangeNotifierProvider(
       create: (context) => PatientProvider(),
 
-      child: MyApp(),
-      // Your app's root widget
-=======
-//       child: MaterialApp(home: MyApp()), // Your app's root widget
-
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: MyApp()), // Your app's root widget
     ),
   );
 }
@@ -46,18 +40,15 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(
-
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
-
     //*****************************
-    return MaterialApp(
-      title: 'Chat App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),home: UserListPage(),
+    // return MaterialApp(
+    //   title: 'Chat App',
+    //   theme: ThemeData(
+    //     primarySwatch: Colors.blue,
+    //   ),home: UserListPage(),
     //   home: DefaultTabController(
     //     length: 2,
     //     child: Scaffold(
@@ -83,19 +74,18 @@ class MyApp extends StatelessWidget {
     // );
     // //*********************
 
-
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   title: 'My App',
-    //   theme: ThemeData(
-    //     primarySwatch: Colors.blue,
-    //     visualDensity: VisualDensity.adaptivePlatformDensity,
-    //   ),
-    //   initialRoute: '/',
-    //   routes: {
-    //     '/': (context) => SplashScreen(),
-    //     // '/home': (context) => Homepage(),
-    //   },
-     );
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'My App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashScreen(),
+        // '/home': (context) => Homepage(),
+      },
+    );
   }
 }

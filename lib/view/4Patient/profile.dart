@@ -6,6 +6,7 @@ import 'package:flutter_native_splash/cli_commands.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+
 import 'package:provider/provider.dart';
 import '../../../assets/images/port/deviceIp.dart';
 
@@ -44,7 +45,7 @@ class _PatientProfileState extends State<PatientProfile> {
   }
 
   // ... other methods ...
-
+ 
   List<Map<String, String>> patientInfo = [
     {"Age": "38"},
     {"Gender": "M"},

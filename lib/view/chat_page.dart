@@ -4,8 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ChatPage extends StatefulWidget {
   final String senderEmail;
   final String senderId;
+  final String recieverEmail;
+  final String recieverId;
 
-  ChatPage({required this.senderEmail, required this.senderId});
+  ChatPage(
+      {required this.senderEmail,
+      required this.senderId,
+      required this.recieverEmail,
+      required this.recieverId});
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -17,7 +23,7 @@ class _ChatPageState extends State<ChatPage> {
   TextEditingController messageController = TextEditingController();
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+  List<dynamic> _list = [];
 // Sending a message
   Future<void> _sendMessage() async {
     if (messageController.text.trim().isNotEmpty) {
@@ -29,17 +35,41 @@ class _ChatPageState extends State<ChatPage> {
       print(
           "Data when sending message ${messageController.text} ${widget.senderId} ${widget.senderEmail}");
 
-      await firestore.collection('messages').add({
-        'text': messageController.text,
-        'senderUid':
-            widget.senderId, // Use the UID from your custom authentication
-        'senderEmail':
-            widget.senderEmail, // Use the email from your custom authentication
-        'timestamp': FieldValue.serverTimestamp(),
-      });
+      try {
+        DocumentReference docRef = await firestore.collection('messages').add({
+          'text': messageController.text,
+          'senderUid':
+              widget.senderId, // Use the UID from your custom authentication
+          'senderEmail': widget
+              .senderEmail, // Use the email from your custom authentication
+          'timestamp': FieldValue.serverTimestamp(),
+          "toId": widget.recieverId,
+          "toEmail": widget.recieverEmail
+        });
+
+        if (docRef != null) {
+          // Document added successfully
+          print("Document added with ID: ${docRef.id}");
+        } else {
+          // Document was not added successfully
+          print("Failed to add document");
+        }
+      } catch (err) {
+        print(err);
+      }
     } else {
       print("message is empty"); //TODO: add snackbar message to show this error
     }
+  }
+
+  // recieve a message
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> _getAllMessage(String id) {
+    return firestore
+        .collection('messages')
+        .where('toId', isEqualTo: id)
+        .orderBy('timestamp', descending: true)
+        .snapshots();
   }
 
   @override
@@ -77,28 +107,51 @@ class _ChatPageState extends State<ChatPage> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              reverse: true, // Display messages from bottom to top
-              itemCount: messages.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      messages[index],
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  trailing: Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                  ),
+            child: StreamBuilder(
+              stream: _getAllMessage(widget.recieverId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator(); // Handle loading state
+                }
+
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}'); // Handle error state
+                }
+
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return Text('No messages'); // Handle no data state
+                }
+
+                final data = snapshot.data!.docs;
+
+                _list = data
+                    .map((doc) => doc.data() as Map<String, dynamic>)
+                    .toList();
+
+                return ListView.builder(
+                  reverse: true,
+                  itemCount: _list.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          _list[index]['text'] as String,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      trailing: Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                      ),
+                    );
+                  },
                 );
               },
             ),

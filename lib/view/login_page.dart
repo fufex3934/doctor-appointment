@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:doctor/controller/Provider.dart';
+import 'package:doctor/controller/Provider.dart';
 import 'package:doctor/model/listCategory.dart';
 import 'package:doctor/view/4Doctor/today_appointments.dart';
 import 'package:doctor/view/4Patient/BookAppointment/bookAppointment.dart';
@@ -12,6 +13,7 @@ import '../assets/images/port/deviceIp.dart';
 
 import 'package:provider/provider.dart';
 
+import '../controller/Provider.dart';
 import './forgot_password.dart';
 
 class LoginPage extends StatefulWidget {
@@ -41,15 +43,21 @@ class _LoginPageState extends State<LoginPage> {
           body: jsonEncode({'email': _email, 'password': _password}));
 
       final data = json.decode(response.body);
+      if (data != false) {
+        setState(() {
+          User = data['value'];
+        });
 
-      setState(() {
-        User = data['value'];
-      });
-      print(User);
-      return (data['status'] == true);
+        print("Logged In UserData $User");
+      } else {
+        print("Login Failed");
+      }
+
+      return (data != false ? data['status'] == true : false);
     }
 
     final patentProvider = Provider.of<PatientProvider>(context, listen: false);
+    final doctorProvider = Provider.of<PatientProvider>(context, listen: false);
 
     return Scaffold(
       resizeToAvoidBottomInset:
@@ -58,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
         key: _formKey,
         child: ListView(
           padding:
-              const EdgeInsets.only(left: 20.0, right: 20, top: 100, bottom: 0),
+              const EdgeInsets.only(left: 20.0, right: 20, top: 150, bottom: 0),
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -183,6 +191,8 @@ class _LoginPageState extends State<LoginPage> {
                     print(User);
                     switch (selectedOption) {
                       case "Doctor":
+                        doctorProvider
+                            .setDoctor(Doctor(loggedInUserData: User));
                         Navigator.push(
                             context,
                             MaterialPageRoute(

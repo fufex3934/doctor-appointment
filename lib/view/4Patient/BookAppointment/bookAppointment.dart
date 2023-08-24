@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:doctor/controller/Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:doctor/controller/Provider.dart';
 import '../../../assets/images/port/deviceIp.dart';
+import '../../../controller/Provider.dart';
 
 class BookAppointment extends StatefulWidget {
   String doctorId;
@@ -118,11 +120,17 @@ List<String> time = [
 class _BookAppointmentState extends State<BookAppointment> {
   DateTime today = DateTime.now();
   TextEditingController _overviewController = TextEditingController();
+  late PatientProvider patientProvider;
 
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     // setState(() {
     //   today = day;
     // });
+  }
+  @override
+  void initState() {
+    super.initState();
+    patientProvider = Provider.of<PatientProvider>(context, listen: false);
   }
 
   Future<void> showModal(String title, String content) async {
@@ -170,9 +178,13 @@ class _BookAppointmentState extends State<BookAppointment> {
 
   @override
   Widget build(BuildContext context) {
-    final patientProvider =
-        Provider.of<PatientProvider>(context, listen: false);
     Future<void> Send_Request() async {
+      print("patient Id :");
+      print(patientProvider.patient?.loggedInUserData['_id']);
+      print("doctor Id :");
+      print(widget.doctorId);
+      print(_overviewController.text);
+
       final response = await http.post(
           Uri.parse('http://${IpAddress()}:3000/users/Doctor/PatientRequest'),
           headers: {'Content-Type': 'application/json'},
