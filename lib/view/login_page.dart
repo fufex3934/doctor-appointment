@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
           User = data['value'];
         });
 
-        print(User);
+        print("Logged In UserData $User");
       } else {
         print("Login Failed");
       }
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
         key: _formKey,
         child: ListView(
           padding:
-              const EdgeInsets.only(left: 20.0, right: 20, top: 100, bottom: 0),
+              const EdgeInsets.only(left: 20.0, right: 20, top: 150, bottom: 0),
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

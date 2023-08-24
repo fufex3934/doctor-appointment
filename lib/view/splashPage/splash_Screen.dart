@@ -1,6 +1,8 @@
 import 'package:doctor/view/Registration_page.dart';
 import 'package:flutter/material.dart';
 
+import '../login_page.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -15,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToHome() async {
     await Future.delayed(Duration(milliseconds: 1500), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => new LandingPage()));
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
   @override
@@ -45,7 +47,6 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
           ),
-
         ],
       ),
     );

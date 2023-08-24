@@ -6,13 +6,13 @@ class PatientProvider extends ChangeNotifier {
 
   Patient? get patient => _patient;
 
-  Doctor? _doctor;
-  Doctor? get doctor => _doctor;
-
   void setPatient(Patient patient) {
     _patient = patient;
     notifyListeners();
   }
+
+  Doctor? _doctor;
+  Doctor? get doctor => _doctor;
 
   void setDoctor(Doctor doctor) {
     _doctor = doctor;
